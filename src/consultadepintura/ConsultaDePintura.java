@@ -6,6 +6,8 @@
 
 package consultadepintura;
 
+import mongoDB.MongoConsultas;
+
 /**
  *
  * @author bapho
@@ -17,6 +19,8 @@ public class ConsultaDePintura {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
+        MongoConsultas.obtemTotalArea();
     }
     
 }

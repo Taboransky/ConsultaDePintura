@@ -95,8 +95,15 @@ public class LeituraXLS {
             for(int j=0;j<sheet.getColumns();j++){
                   Cell cell=sheet.getCell(j,i);
                   if(  cell.getContents() != "" ){
-                    jRow.put( sheet.getCell(j,0).getContents(),  cell.getContents() );
-                    doc.append(sheet.getCell(j,0).getContents(),  cell.getContents());
+                   // jRow.put( sheet.getCell(j,0).getContents(),  cell.getContents() );
+                    
+                    if( sheet.getCell(j,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
+                        double value = Double.parseDouble( cell.getContents());
+                        doc.append("area",  value);
+                    } else {
+                        doc.append(sheet.getCell(j,0).getContents(),  cell.getContents());
+                    }
+                      
                   }
             }
 
@@ -116,6 +123,11 @@ public class LeituraXLS {
       
     workbook.close();
     
-   }
+    //comandos importantes:
+    // Deletar toda a collection db.pt.remove({})
+    // db.pt.aggregate([{ $group : { _id:"$#subgrupo",total: {$sum:"$area"} } }])
+     //db.pt.count({ "#subgrupo" : "zona A"})
+    
+   } 
 
 }
