@@ -82,14 +82,14 @@ public class LeituraXLS {
         Sheet sheet = workbook.getSheet(0);
       
       
-        JSONObject json = new JSONObject();
+        //JSONObject json = new JSONObject();
       
-        JSONArray rows = new JSONArray();
+        //JSONArray rows = new JSONArray();
       
       
         for(int i=1;i<sheet.getRows();i++){
-            JSONObject jRow = new JSONObject();
-            JSONArray cells = new JSONArray();
+            //JSONObject jRow = new JSONObject();
+            //JSONArray cells = new JSONArray();
             Document doc = new Document(); //Mudei para o Tipo Document, pq o mongo pede esse tipo ao invez do json, ele faz a convercao dele de document para json
             
             for(int j=0;j<sheet.getColumns();j++){
@@ -98,7 +98,7 @@ public class LeituraXLS {
                    // jRow.put( sheet.getCell(j,0).getContents(),  cell.getContents() );
                     
                     if( sheet.getCell(j,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
-                        double value = Double.parseDouble( cell.getContents());
+                        double value = Double.parseDouble( cell.getContents()); //TODO: qual tipo de arquivo cabe toda a area? Long?
                         doc.append("area",  value);
                     } else {
                         doc.append(sheet.getCell(j,0).getContents(),  cell.getContents());
