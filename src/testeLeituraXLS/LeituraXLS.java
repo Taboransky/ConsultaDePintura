@@ -20,6 +20,8 @@ import jxl.WorkbookSettings;
 
 import jxl.read.biff.BiffException;
 
+import jxl.read.*;
+
 import jxl.write.Label;
 import jxl.write.Number;
 import jxl.write.WritableSheet;
@@ -34,11 +36,15 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import static java.util.Arrays.asList;
+import jxl.NumberCell;
+import jxl.write.NumberFormat;
+import jxl.write.WritableCellFormat;
 /**
  *
  * @author bapho
@@ -86,7 +92,6 @@ public class LeituraXLS {
       
         //JSONArray rows = new JSONArray();
       
-      
         for(int i=1;i<sheet.getRows();i++){
             //JSONObject jRow = new JSONObject();
             //JSONArray cells = new JSONArray();
@@ -98,7 +103,20 @@ public class LeituraXLS {
                    // jRow.put( sheet.getCell(j,0).getContents(),  cell.getContents() );
                     
                     if( sheet.getCell(j,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
-                        double value = Double.parseDouble( cell.getContents()); //TODO: qual tipo de arquivo cabe toda a area? Long?
+                        /*
+                        if (A.getType() == CellType.NUMBER) {
+                            NumberCell nc = (NumberCell) A;
+                            double doubleA = nc.getValue();
+                            // this is a double containing the exact numeric value that was stored 
+                            // in the spreadsheet
+                        }
+                        */
+                        
+                        NumberCell nc = (NumberCell) cell;
+                        double value = nc.getValue();
+                                
+                        System.out.println("value: " + value + " vem do excel: " + cell.getContents());
+                        
                         doc.append("area",  value);
                     } else {
                         doc.append(sheet.getCell(j,0).getContents(),  cell.getContents());
@@ -125,6 +143,7 @@ public class LeituraXLS {
     
     //comandos importantes:
     // Deletar toda a collection db.pt.remove({})
+    // db.pt.findOne({"#nome":"FLG-04A 420"})
     // db.pt.aggregate([{ $group : { _id:"$#subgrupo",total: {$sum:"$area"} } }])
      //db.pt.count({ "#subgrupo" : "zona A"})
     
