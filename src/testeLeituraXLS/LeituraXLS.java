@@ -60,30 +60,37 @@ public class LeituraXLS {
        
        System.out.println("tamo na Main");
        try{ 
-           testaLer(db);
+           //testaLer(db);
+           lerTudo(db);
        } catch(Exception e)
        {System.out.println(e.getMessage());};
       
    }
    
-   public static void testaLer( MongoDatabase db ) throws IOException, BiffException{
-        System.out.println("Entramo na funcao");
+   public static void lerTudo(MongoDatabase db) throws IOException, BiffException {
+       File folder = new File("/plataformFiles");
+       File[] listOfFiles = folder.listFiles();
+       ArrayList<String> listOfFileName = new ArrayList<String>();
        
-        File folder = new File("/plataformFiles");
-        File[] listOfFiles = folder.listFiles();
-        ArrayList<String> listOfFileName = new ArrayList<String>();
-        
-        
-        for (File file : listOfFiles) {
+       
+       for (File file : listOfFiles) {
             if (file.isFile()) {
-                listOfFileName.add(file.getName());
+                //listOfFileName.add(file.getName());
+                testaLer(db, file.getName());
             }
         }
+       
+   }
+   
+   public static void testaLer( MongoDatabase db, String fileName) throws IOException, BiffException{
+        System.out.println("Entramo na funcao");
+        
+        String filePath = "/plataformFiles/" + fileName;
  
         WorkbookSettings ws = new WorkbookSettings();// resolver o problema de encoding.
         ws.setEncoding("Cp1252");//enconding com utf-8
        
-        Workbook workbook = Workbook.getWorkbook(new File("/plataformFiles/P-56_M49_S01.xls"),ws);
+        Workbook workbook = Workbook.getWorkbook(new File(filePath),ws);
         System.out.println("li o arquivo");
         Sheet sheet = workbook.getSheet(0);
       
@@ -112,6 +119,9 @@ public class LeituraXLS {
                         }
                         */
                         
+                        // células com vírgula dando erro
+                        // pegar como String;   string.replace(",",".")
+                        
                         NumberCell nc = (NumberCell) cell;
                         double value = nc.getValue();
                                 
@@ -138,7 +148,7 @@ public class LeituraXLS {
     // Get the JSON text.
     //System.out.println(json.toString());
 
-      
+        
     workbook.close();
     
     //comandos importantes:
