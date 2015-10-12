@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import static java.util.Arrays.asList;
+import jxl.CellType;
 import jxl.NumberCell;
 import jxl.write.NumberFormat;
 import jxl.write.WritableCellFormat;
@@ -118,12 +119,21 @@ public class LeituraXLS {
                             // in the spreadsheet
                         }
                         */
-                        
-                        // células com vírgula dando erro
-                        // pegar como String;   string.replace(",",".")
-                        
-                        NumberCell nc = (NumberCell) cell;
-                        double value = nc.getValue();
+                        double value;
+                                
+                        if(cell.getType() != CellType.NUMBER){
+                            String tempCell = "" + cell.getContents().toString();
+                                // sout pra testar
+                                System.out.println("String nao numero: " + tempCell);
+                            tempCell = tempCell.replace(",", ".");
+                                // sout pra testar
+                                System.out.println("String após replace: " + tempCell);
+                            value = Double.parseDouble(tempCell);
+                        }
+                        else {
+                            NumberCell nc = (NumberCell) cell;
+                            value = nc.getValue();
+                        }
                                 
                         System.out.println("value: " + value + " vem do excel: " + cell.getContents());
                         
