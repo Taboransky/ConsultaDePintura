@@ -97,7 +97,6 @@ public class LeituraXLS {
       
       
         //JSONObject json = new JSONObject();
-      
         //JSONArray rows = new JSONArray();
       
         for(int i=1;i<sheet.getRows();i++){
@@ -124,10 +123,10 @@ public class LeituraXLS {
                         if(cell.getType() != CellType.NUMBER){
                             String tempCell = "" + cell.getContents().toString();
                                 // sout pra testar
-                                System.out.println("String nao numero: " + tempCell);
+                                //System.out.println("String nao numero: " + tempCell);
                             tempCell = tempCell.replace(",", ".");
                                 // sout pra testar
-                                System.out.println("String após replace: " + tempCell);
+                                //System.out.println("String após replace: " + tempCell);
                             value = Double.parseDouble(tempCell);
                         }
                         else {
@@ -135,18 +134,20 @@ public class LeituraXLS {
                             value = nc.getValue();
                         }
                                 
-                        System.out.println("value: " + value + " vem do excel: " + cell.getContents());
+                        //System.out.println("value: " + value + " vem do excel: " + cell.getContents());
                         
                         doc.append("area",  value);
+                    } else if( j==2 ) {
+                          doc.append("supgrupo-zona", cell.getContents());
+                          
                     } else {
                         doc.append(sheet.getCell(j,0).getContents(),  cell.getContents());
                     }
                       
                   }
             }
-
                //rows.put( jRow );
-               db.getCollection("pt").insertOne( doc );//salvar os documentos na collection pt. 
+               db.getCollection("pt").insertOne( doc );//salvar os documentos na collection pt.
                //System.out.println(jRow);
              
         }
