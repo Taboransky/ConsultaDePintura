@@ -143,7 +143,7 @@ public class LeituraXLS {
                         if (cellZone.matches("(\\w+) (Alta) (\\w)")){
                             System.out.println("Achei um! " + cellZone);
                             cellZone = cellZone.replaceAll("(\\w+) (Alta) (\\w)", "$1 $3 $2");
-                            System.out.println("Novo valor: " + cellZone);
+                            //System.out.println("Novo valor: " + cellZone);
                         }
                         doc.append("subgrupo-zona", cellZone);
                           
@@ -177,8 +177,8 @@ public class LeituraXLS {
     // db.pt.count({"supgrupo-zona":/.*Alta.*/})
     
     
-    // Item 1):     db.pt.aggregate([{$match:{"subgrupo-zona":/.*Alta.*/}},{$group:{_id:"$subgrupo-zona",total:{$sum:"$area"}}}])
-    // Item 2):     ( db.pt.stats() * 100 / db.pt.count({"supgrupo-zona":/.*Alta.*/}) )
+    // Item 1): db.pt.aggregate([ {$match:{"#nome":/.*/} }, {$match:{"subgrupo-zona":/.*Alta.*/} }, {$group:{_id:"$subgrupo-zona",total:{$sum:"$area"}}}, {$sort: { total: -1 }} ])
+    // Item 2): ( db.pt.stats() * 100 / db.pt.count({"supgrupo-zona":/.*Alta.*/}) )
     
    } 
 
