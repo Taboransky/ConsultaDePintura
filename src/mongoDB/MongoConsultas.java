@@ -31,10 +31,29 @@ public class MongoConsultas {
         
         System.out.println(ptCollection.count());
         
+        /*
         AggregateIterable<Document> iterable = database.getCollection("pt").aggregate(asList(
-        new Document("$group", new Document("_id", "$#subgrupo").append("area", new Document("$sum","$area")))));
+        new Document("$group", new Document("_id", "$#subgrupo").append("Area", new Document("$sum","$area")))));
         
         iterable.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                System.out.println(document.toJson());
+            }
+        });
+        */
+        
+        String regexpN = "^.*$";
+        String regexpSG =  "^.*Alta.*$";
+        AggregateIterable<Document> agg = database.getCollection("pt").aggregate(asList(
+                new Document("$match", new Document("#nome",java.util.regex.Pattern.compile(regexpN))),
+                new Document("$match", new Document("subgrupo-zona",java.util.regex.Pattern.compile(regexpSG))),
+                new Document("$group", new Document("_id", "$subgrupo-zona").append("Area", new Document("$sum","$area"))),
+                new Document("$sort", new Document("Area",-1))
+        ));
+        
+        
+        agg.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
                 System.out.println(document.toJson());
@@ -43,4 +62,19 @@ public class MongoConsultas {
         
     }
     
+    public static void main(String[] args) {
+        obtemTotalArea();
+    }
+    
+    
+    // db.pt.aggregate([
+    //  { $group : { _id:"$#subgrupo",total: {$sum:"$area"} } }
+    // ])
+    
+    // db.pt.aggregate([
+    //  {$match:{"#nome":/.*/} },
+    //  {$match:{"subgrupo-zona":/.*Alta.*/} },
+    //  {$group:{_id:"$subgrupo-zona",total:{$sum:"$area"}}},
+    //  {$sort: { total: -1 }}
+    // ])
 }
