@@ -71,7 +71,7 @@ public class LeituraXLS {
    public static void lerTudo(MongoDatabase db) throws IOException, BiffException {
        File folder = new File("/plataformFiles");
        File[] listOfFiles = folder.listFiles();
-       ArrayList<String> listOfFileName = new ArrayList<String>();
+       //ArrayList<String> listOfFileName = new ArrayList<String>();
        
        
        for (File file : listOfFiles) {
@@ -106,7 +106,7 @@ public class LeituraXLS {
             
             for(int j=0;j<sheet.getColumns();j++){
                   Cell cell=sheet.getCell(j,i);
-                  if(  cell.getContents() != "" ){
+                  if(  !cell.getContents().isEmpty() ){
                    // jRow.put( sheet.getCell(j,0).getContents(),  cell.getContents() );
                     
                     if( sheet.getCell(j,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
@@ -121,7 +121,7 @@ public class LeituraXLS {
                         double value;
                                 
                         if(cell.getType() != CellType.NUMBER){
-                            String tempCell = "" + cell.getContents().toString();
+                            String tempCell = "" + cell.getContents();
                                 // sout pra testar
                                 //System.out.println("String nao numero: " + tempCell);
                             tempCell = tempCell.replace(",", ".");
@@ -138,7 +138,14 @@ public class LeituraXLS {
                         
                         doc.append("area",  value);
                     } else if( j==2 ) {
-                          doc.append("supgrupo-zona", cell.getContents());
+                        String cellZone = cell.getContents();
+                        
+                        if (cellZone.matches("(\\w+) (Alta) (\\w)")){
+                            System.out.println("Achei um! " + cellZone);
+                            cellZone = cellZone.replaceAll("(\\w+) (Alta) (\\w)", "$1 $3 $2");
+                            System.out.println("Novo valor: " + cellZone);
+                        }
+                        doc.append("subgrupo-zona", cellZone);
                           
                     } else {
                         doc.append(sheet.getCell(j,0).getContents(),  cell.getContents());
@@ -166,7 +173,12 @@ public class LeituraXLS {
     // Deletar toda a collection db.pt.remove({})
     // db.pt.findOne({"#nome":"FLG-04A 420"})
     // db.pt.aggregate([{ $group : { _id:"$#subgrupo",total: {$sum:"$area"} } }])
-     //db.pt.count({ "#subgrupo" : "zona A"})
+    // db.pt.count({ "#subgrupo" : "zona A"})
+    // db.pt.count({"supgrupo-zona":/.*Alta.*/})
+    
+    
+    // Item 1):     db.pt.aggregate([{$match:{"subgrupo-zona":/.*Alta.*/}},{$group:{_id:"$subgrupo-zona",total:{$sum:"$area"}}}])
+    // Item 2):     ( db.pt.stats() * 100 / db.pt.count({"supgrupo-zona":/.*Alta.*/}) )
     
    } 
 
