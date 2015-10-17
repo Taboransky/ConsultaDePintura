@@ -4,14 +4,11 @@
  * and open the template in the editor.
  */
 
-package testeLeituraXLS;
+package testesExcel;
 
 
-import com.sun.rowset.internal.Row;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -20,32 +17,16 @@ import jxl.WorkbookSettings;
 
 import jxl.read.biff.BiffException;
 
-import jxl.read.*;
 
-import jxl.write.Label;
-import jxl.write.Number;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-
-import org.json.*;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
 import org.bson.Document;
 
-import java.text.DateFormat;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
-import static java.util.Arrays.asList;
 import jxl.CellType;
 import jxl.NumberCell;
-import jxl.write.NumberFormat;
-import jxl.write.WritableCellFormat;
 /**
  *
  * @author bapho
