@@ -50,6 +50,7 @@ public class MongoConsultas {
                 new Document("$match", new Document("subgrupo-zona",java.util.regex.Pattern.compile(regexpSG))),
                 new Document("$group", new Document("_id", "$subgrupo-zona").append("Area", new Document("$sum","$area"))),
                 new Document("$sort", new Document("Area",-1))
+                //new Document("$sort", new Document("_id",1))
         ));
         
         
@@ -77,4 +78,7 @@ public class MongoConsultas {
     //  {$group:{_id:"$subgrupo-zona",total:{$sum:"$area"}}},
     //  {$sort: { total: -1 }}
     // ])
+    
+     
 }
+
