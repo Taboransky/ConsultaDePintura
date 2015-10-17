@@ -69,7 +69,8 @@ public class LeituraXLS {
    }
    
    public static void lerTudo(MongoDatabase db) throws IOException, BiffException {
-       File folder = new File("/plataformFiles");
+       //File folder = new File("/plataformFiles");
+       File folder = new File("src/documentos_geiza");
        File[] listOfFiles = folder.listFiles();
        //ArrayList<String> listOfFileName = new ArrayList<String>();
        
