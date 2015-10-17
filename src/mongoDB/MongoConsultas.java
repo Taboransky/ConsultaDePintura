@@ -5,16 +5,21 @@
  */
 package mongoDB;
 
+import testesExcel.EscrituraXLS;
+
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.Block;
 import com.mongodb.client.AggregateIterable;
+import java.util.ArrayList;
 
 import org.bson.Document;
 
 import static java.util.Arrays.asList;
+import java.util.List;
+import testesExcel.LeituraXLS;
 
 /**
  *
@@ -54,17 +59,27 @@ public class MongoConsultas {
         ));
         
         
+        List<String> sToPass = new ArrayList<>();
+        
         agg.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                System.out.println(document.toJson());
+                //System.out.println(document.toJson());
+                ///*
+                for(Object o : document.values()) {
+                    //System.out.println(o.toString());
+                    sToPass.add(o.toString());
+                }
+                //*/                
             }
+            
         });
-        
+        EscrituraXLS.writeFromList(sToPass);
     }
     
     public static void main(String[] args) {
         obtemTotalArea();
+        
     }
     
     
