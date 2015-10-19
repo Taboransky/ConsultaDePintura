@@ -66,7 +66,7 @@ public class LeituraXLS {
    }
    
    public static void testaLer( MongoDatabase db, String fileName) throws IOException, BiffException{
-        System.out.println("Entramo na funcao");
+        //System.out.println("Entramo na funcao");
         
         String filePath = "/plataformFiles/" + fileName;
  

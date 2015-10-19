@@ -21,14 +21,60 @@ public class EscrituraXLS {
         
     }
  
+    
+    
+    public static void writeDiameter(List<Object> list){
+        Label labelToAdd;
+        Number numToAdd;
+        int coluna=0, linha=0;
+        
+        System.out.println(".size() da lista = " + list.size());
+        try {
+            File exlFile = new File("src/output/write_test2.xls");
+            WritableWorkbook writableWorkbook = Workbook.createWorkbook(exlFile);
+ 
+            WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
+            
+            for(Object o : list) {
+                //System.out.println("Objeto original: " + o.toString());
+                if(o.getClass() == String.class) {
+                    String s = o.toString();
+                    //System.out.println("Achei uma String: " + s);
+                    labelToAdd = new Label(coluna, linha, s);
+                    writableSheet.addCell(labelToAdd);
+                    
+                } else
+                    if (o.getClass() == Double.class) {
+                        Double d = Double.parseDouble(o.toString());
+                        //System.out.println("Achei um Double: "+ d);
+                        numToAdd = new Number(coluna, linha, d);
+                        writableSheet.addCell(numToAdd);
+                    }
+                coluna++;
+                if(coluna>2) {
+                    linha++;
+                    coluna=0;
+                }
+            }
+            
+            writableWorkbook.write();
+            writableWorkbook.close();
+            
+        } catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    
+    
     // função feita pra query de aggregate de zona (2 elementos: 1 string, 1 num)
-    public static void writeFromList(List<String> list) {
+    public static void writeFromList(List<String> list, int listSize) {
         Label labelToAdd;
         Number numToAdd;
         int linha=0 , coluna=0;
         
         try {
-            File exlFile = new File("src/output/write_test.xls");
+            File exlFile = new File("src/output/write_test2.xls");
             WritableWorkbook writableWorkbook = Workbook.createWorkbook(exlFile);
  
             WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
@@ -36,6 +82,7 @@ public class EscrituraXLS {
             for(String s : list){
                 //System.out.println("Coluna: "+coluna+"\nLinha: "+linha);
                 
+                /*
                 if(coluna == 0){
                     labelToAdd = new Label(coluna, linha, s);
                     writableSheet.addCell(labelToAdd);
@@ -43,8 +90,12 @@ public class EscrituraXLS {
                     numToAdd = new Number(coluna,linha,Double.parseDouble(s));
                     writableSheet.addCell(numToAdd);
                 }
+                */
+                labelToAdd = new Label(coluna, linha, s);
+                writableSheet.addCell(labelToAdd);
+                
                 coluna++;
-                if(coluna>1) {
+                if(coluna>(listSize-1)) {
                     linha++;
                     coluna=0;
                 }
