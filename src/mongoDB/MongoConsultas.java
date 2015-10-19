@@ -117,52 +117,22 @@ public class MongoConsultas {
         
         
         List<String> sToPass = new ArrayList<>();
+        //List<Object> listO = new ArrayList<>();
         
         agg.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
                 //System.out.println(document.toJson());
-                ///*
                 for(Object o : document.values()) {
-                    //System.out.println(o.toString());
+                    //System.out.println(o.getClass().getName() +" : " + o.toString());
                     sToPass.add(o.toString());
-                }
-                //*/                
+                    //listO.add(o);
+                }     
             }
             
         });
-        EscrituraXLS.writeFromList(sToPass, 2);
-    }
-    
-    
-    
-    public static List<Object> filterSameCompNo(List<Object> originalList) {
-        List<Object> returnList = new ArrayList<>();
-        String singularComp="";
-        double d1=0, d2=0;
-        
-        System.out.println("returnList size()" + returnList.size());
-        for(int i=0; i<returnList.size(); i++){
-            if(i%3==0){
-                if(!returnList.get(i).equals(singularComp)) {
-                    singularComp = returnList.get(i).toString();
-                }
-                
-            } else 
-            if(i%3==1) {
-                if(returnList.get(i-1).equals(singularComp)) {
-                    d1 += Double.parseDouble(returnList.get(i).toString());
-                }
-            } else
-            if(i%3==2) {
-                if(returnList.get(i-2).equals(singularComp)) {
-                    d2 += Double.parseDouble(returnList.get(i).toString());
-                }
-            }
-        }
-        
-        
-        return returnList;
+        EscrituraXLS.writeZoneArea(sToPass);
+        //EscrituraXLS.writeZoneArea(listO);
     }
     
     
@@ -178,7 +148,7 @@ public class MongoConsultas {
                 if(originalList.get(i).toString().equals(singularComp)) {
                     d1 += Double.parseDouble( originalList.get(i+1).toString() );
                     d2 += Double.parseDouble( originalList.get(i+2).toString() );
-                    //i += 2;
+                    i += 2;
                 } else {
                     returnList.add(singularComp);
                     returnList.add(d1);
@@ -188,13 +158,11 @@ public class MongoConsultas {
                     singularComp = originalList.get(i).toString();
                     d1 = Double.parseDouble( originalList.get(i+1).toString() );
                     d2 = Double.parseDouble( originalList.get(i+2).toString() );
-                    //i += 2;
+                    i += 2;
                 }
-                
             }
         }
-        
-          System.out.println("returnList.size(): " + returnList.size());
+        System.out.println("returnList.size(): " + returnList.size());
         
         return returnList;
     }
@@ -250,8 +218,8 @@ public class MongoConsultas {
     
     
     public static void main(String[] args) {
-        //obtemTotalArea();
-        obtemDiametroFlanges();
+        obtemTotalArea();
+        //obtemDiametroFlanges();
     }
     
     

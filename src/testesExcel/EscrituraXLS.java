@@ -7,13 +7,11 @@
 package testesExcel;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
  
 import jxl.*;
 import jxl.write.*;
 import jxl.write.Number;
-import jxl.write.Boolean;
 
 public class EscrituraXLS {
     
@@ -26,7 +24,7 @@ public class EscrituraXLS {
     public static void writeDiameter(List<Object> list){
         Label labelToAdd;
         Number numToAdd;
-        int coluna=0, linha=0;
+        int coluna=0, linha=1;
         
         System.out.println(".size() da lista = " + list.size());
         try {
@@ -35,27 +33,31 @@ public class EscrituraXLS {
  
             WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
             
-            for(Object o : list) {
-                //System.out.println("Objeto original: " + o.toString());
-                if(o.getClass() == String.class) {
-                    String s = o.toString();
-                    //System.out.println("Achei uma String: " + s);
-                    labelToAdd = new Label(coluna, linha, s);
-                    writableSheet.addCell(labelToAdd);
-                    
-                } else
-                    if (o.getClass() == Double.class) {
-                        Double d = Double.parseDouble(o.toString());
-                        //System.out.println("Achei um Double: "+ d);
-                        numToAdd = new Number(coluna, linha, d);
-                        writableSheet.addCell(numToAdd);
+            writableSheet.addCell(new Label(0,0,"Flange"));
+            writableSheet.addCell(new Label(1,0,"Diametro 1"));
+            writableSheet.addCell(new Label(2,0,"Diametro 2"));
+            
+                for(Object o : list) {
+                    //System.out.println("Objeto original: " + o.toString());
+                    if(o.getClass() == String.class) {
+                        String s = o.toString();
+                        //System.out.println("Achei uma String: " + s);
+                        labelToAdd = new Label(coluna, linha, s);
+                        writableSheet.addCell(labelToAdd);
+
+                    } else
+                        if (o.getClass() == Double.class) {
+                            Double d = Double.parseDouble(o.toString());
+                            //System.out.println("Achei um Double: "+ d);
+                            numToAdd = new Number(coluna, linha, d);
+                            writableSheet.addCell(numToAdd);
+                        }
+                    coluna++;
+                    if(coluna>2) {
+                        linha++;
+                        coluna=0;
                     }
-                coluna++;
-                if(coluna>2) {
-                    linha++;
-                    coluna=0;
                 }
-            }
             
             writableWorkbook.write();
             writableWorkbook.close();
@@ -68,10 +70,10 @@ public class EscrituraXLS {
     
     
     // função feita pra query de aggregate de zona (2 elementos: 1 string, 1 num)
-    public static void writeFromList(List<String> list, int listSize) {
+    public static void writeZoneArea(List<String> list) {
         Label labelToAdd;
         Number numToAdd;
-        int linha=0 , coluna=0;
+        int linha=1, coluna=0;
         
         try {
             File exlFile = new File("src/output/write_test2.xls");
@@ -79,28 +81,45 @@ public class EscrituraXLS {
  
             WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
             
-            for(String s : list){
-                //System.out.println("Coluna: "+coluna+"\nLinha: "+linha);
-                
-                /*
-                if(coluna == 0){
-                    labelToAdd = new Label(coluna, linha, s);
-                    writableSheet.addCell(labelToAdd);
-                } else {
-                    numToAdd = new Number(coluna,linha,Double.parseDouble(s));
-                    writableSheet.addCell(numToAdd);
+            writableSheet.addCell(new Label(0,0,"Zona"));
+            writableSheet.addCell(new Label(1,0,"Area Total"));
+            
+            for(Object o : list) {
+                    //System.out.println("Objeto original: " + o.toString());
+                    if(o.getClass() == String.class) {
+                        String s = o.toString();
+                        //System.out.println("Achei uma String: " + s);
+                        labelToAdd = new Label(coluna, linha, s);
+                        writableSheet.addCell(labelToAdd);
+
+                    } else
+                        if (o.getClass() == Double.class) {
+                            Double d = Double.parseDouble(o.toString());
+                            //System.out.println("Achei um Double: "+ d);
+                            numToAdd = new Number(coluna, linha, d);
+                            writableSheet.addCell(numToAdd);
+                        }
+                    coluna++;
+                    if(coluna>1) {
+                        linha++;
+                        coluna=0;
+                    }
                 }
-                */
+            
+            /*
+            for(String s : list){
+                
                 labelToAdd = new Label(coluna, linha, s);
                 writableSheet.addCell(labelToAdd);
                 
                 coluna++;
-                if(coluna>(listSize-1)) {
+                if(coluna>(1)) {
                     linha++;
                     coluna=0;
                 }
-                
             }
+            */
+            
             /*
             Label label = new Label(0, 0, "Label (String)");
             DateTime date = new DateTime(1, 0, new Date());
@@ -114,6 +133,7 @@ public class EscrituraXLS {
             //Write and close the workbook
             writableWorkbook.write();
             writableWorkbook.close();
+            System.out.println("Arquivo salvo: " + exlFile.getName());
  
         } catch(Exception e)
        {System.out.println(e.getMessage());};
