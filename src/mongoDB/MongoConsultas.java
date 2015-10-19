@@ -62,7 +62,7 @@ public class MongoConsultas {
             }
         };
         //ptCollection.find(eq("*Comp no",java.util.regex.Pattern.compile(regexFLG))).limit(2).forEach(printBlock);
-        ptCollection.find(eq("*Comp no",java.util.regex.Pattern.compile(regexFLG))).forEach(printBlock);
+        ptCollection.find(eq("*Comp no",java.util.regex.Pattern.compile(regexFLG))).sort(new Document("*Comp no",1)).forEach(printBlock);
         
         
         System.out.println("Tamanho FINAL de listString: " + listStringFromDocument.size());
@@ -184,9 +184,6 @@ public class MongoConsultas {
                     returnList.add(d1);
                     returnList.add(d2);
                     
-                    if(returnList.contains(originalList.get(i))) {
-                        //implementar algo??
-                    }
                     
                     singularComp = originalList.get(i).toString();
                     d1 = Double.parseDouble( originalList.get(i+1).toString() );
