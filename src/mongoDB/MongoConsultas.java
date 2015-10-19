@@ -33,6 +33,7 @@ public class MongoConsultas {
         
         MongoCollection<Document> ptCollection = initiateMongoCollection();
         String regexFLG = "^FLG.*$";
+        //String regexFLG = "^FLG-04A$";
         List<String> listStringFromDocument = new ArrayList<>();
         
         List<Object> listO = new ArrayList<>();
@@ -43,23 +44,21 @@ public class MongoConsultas {
             public void apply(Document document) {
                 //System.out.println(document.toJson());
                 //System.out.println(document.getString("*Comp no") +" - "+ document.getString("#nome") + " - " + document.getString("*NPD"));
-                int column=0;
+                int column=0; // colum indica cada célula/key do elemento
                 //System.out.println("Tamanho de .values().size = "+document.values().size());
                 for(Object o : document.values()){
                    // System.out.println("o to String retorna: " + o.toString());
-                    if (o.toString().equals(document.getString("*Comp no")) && column!=1){
-                        listStringFromDocument.add(document.getString("*Comp no"));
-                        listStringFromDocument.add(document.getString("*NPD"));
+                    if (o.toString().equals(document.getString("*Comp no")) && column!=1){ // tive que botar column!=1 pois alguns #nome eram iguais a *Comp no (ou seja, duplicava)
+                        listStringFromDocument.add(document.getString("*Comp no")); 
+                        listStringFromDocument.add(document.getString("*NPD")); //salva primeiro *Comp no e *NPD em um array de String
                         
                         //System.out.println(document.getString("*Comp no"));
                         //System.out.println(document.getString("*NPD"));
                     }
                     //System.out.println("Coluna: " + column);
                     column++;
-                    
                 }
                 //System.out.println("Tamanho de listString: " + listStringFromDocument.size());
-                
             }
         };
         //ptCollection.find(eq("*Comp no",java.util.regex.Pattern.compile(regexFLG))).limit(2).forEach(printBlock);
@@ -68,19 +67,21 @@ public class MongoConsultas {
         
         System.out.println("Tamanho FINAL de listString: " + listStringFromDocument.size());
         
-        for(int j=0;j<listStringFromDocument.size();j++){
+        for(int j=0;j<listStringFromDocument.size();j++){  //lista string tem formato: *Comp, *NPD, *Comp, *NPD, *Comp, *NPD, etc...
             if (j%2==0){
                 listO.add(listStringFromDocument.get(j));
             } else {
                 //String[] parts = listFromDocument.get(j).split(" ");
-                String[] parts = listStringFromDocument.get(j).replaceAll("\"", "").split(" ");
+                String[] parts = listStringFromDocument.get(j).replaceAll("\"", "").split(" "); // separa *NPD 1" 1"  em 2 elementos 1
                 
                 listO.add(inchesToCentimeters(parts[0]));
                 listO.add(inchesToCentimeters(parts[1]));
             }
         }
         
-        EscrituraXLS.writeDiameter(listO);
+        System.out.println("listO.size() : " + listO.size());
+        EscrituraXLS.writeDiameter(filterSameCompNo2(listO));
+        //EscrituraXLS.writeDiameter(listO); //listO = [String, double, double]
 
         // db.pt.find({"*Comp no":"FLG-04A","*NPD":/.*/},{"*NPD":1,"*Comp no":1}).pretty()
     }
@@ -135,8 +136,75 @@ public class MongoConsultas {
     
     
     
+    public static List<Object> filterSameCompNo(List<Object> originalList) {
+        List<Object> returnList = new ArrayList<>();
+        String singularComp="";
+        double d1=0, d2=0;
+        
+        System.out.println("returnList size()" + returnList.size());
+        for(int i=0; i<returnList.size(); i++){
+            if(i%3==0){
+                if(!returnList.get(i).equals(singularComp)) {
+                    singularComp = returnList.get(i).toString();
+                }
+                
+            } else 
+            if(i%3==1) {
+                if(returnList.get(i-1).equals(singularComp)) {
+                    d1 += Double.parseDouble(returnList.get(i).toString());
+                }
+            } else
+            if(i%3==2) {
+                if(returnList.get(i-2).equals(singularComp)) {
+                    d2 += Double.parseDouble(returnList.get(i).toString());
+                }
+            }
+        }
+        
+        
+        return returnList;
+    }
+    
+    
+    
+      public static List<Object> filterSameCompNo2(List<Object> originalList) {
+        List<Object> returnList = new ArrayList<>();
+        String singularComp=originalList.get(0).toString();
+        double d1=0, d2=0;
+        
+        System.out.println("originalList.size() : " + originalList.size());
+        for(int i=0; i<originalList.size(); i++){
+            if(i%3==0){
+                if(originalList.get(i).toString().equals(singularComp)) {
+                    d1 += Double.parseDouble( originalList.get(i+1).toString() );
+                    d2 += Double.parseDouble( originalList.get(i+2).toString() );
+                    //i += 2;
+                } else {
+                    returnList.add(singularComp);
+                    returnList.add(d1);
+                    returnList.add(d2);
+                    
+                    if(returnList.contains(originalList.get(i))) {
+                        //implementar algo??
+                    }
+                    
+                    singularComp = originalList.get(i).toString();
+                    d1 = Double.parseDouble( originalList.get(i+1).toString() );
+                    d2 = Double.parseDouble( originalList.get(i+2).toString() );
+                    //i += 2;
+                }
+                
+            }
+        }
+        
+          System.out.println("returnList.size(): " + returnList.size());
+        
+        return returnList;
+    }
+    
+    
+    
     public static double inchesToCentimeters(String inches) {
-        String cm;
         double aux;
         final double INCH_TO_CM = 2.54;
         
