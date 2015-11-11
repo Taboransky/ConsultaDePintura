@@ -157,6 +157,7 @@ public class LeituraXLS {
     // db.pt.aggregate([{ $group : { _id:"$#subgrupo",total: {$sum:"$area"} } }])
     // db.pt.count({ "#subgrupo" : "zona A"})
     // db.pt.count({"supgrupo-zona":/.*Alta.*/})
+	// db.pt.find().limit(-1).skip(x).next()   // pegar registro aleatório
     
     
     // Item 1): db.pt.aggregate([ {$match:{"#nome":/.*/} }, {$match:{"subgrupo-zona":/.*Alta.*/} }, {$group:{_id:"$subgrupo-zona",total:{$sum:"$area"}}}, {$sort: { total: -1 }} ])
