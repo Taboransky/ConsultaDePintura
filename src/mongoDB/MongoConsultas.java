@@ -22,11 +22,62 @@ import org.bson.Document;
 import static java.util.Arrays.asList;
 import java.util.List;
 
+import consultadepintura.CalculosMetricas;
+
 /**
  *
  * @author Drope
  */
 public class MongoConsultas {
+    
+    
+    public static void main(String[] args) {
+        obtemAreaPorSetor();
+        //obtemTotalArea(); 
+        //obtemDiametroFlanges();
+    }
+    
+    
+    public static void obtemAreaPorSetor(){
+        // db.pt.aggregate([{$match:{"#nome":/.*/}},{$group:{_id:"$#grupo",total:{$sum:"$area"}}},{$sort:{_id:1}}])
+        
+        MongoCollection<Document> ptCollection = initiateMongoCollection();
+        String regexNome = "^.*$";
+        
+        AggregateIterable<Document> agg = ptCollection.aggregate(asList(
+            new Document("$match",new Document("#nome",java.util.regex.Pattern.compile(regexNome))),
+            new Document("$group",new Document("_id","$#grupo").append("Total", new Document("$sum","$area"))),
+            new Document("$sort", new Document("_id",1))
+        ));
+        
+        
+        List<String> stringListFromDocument = new ArrayList<>();
+        List<Object> listO = new ArrayList<>();
+        
+        agg.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                //System.out.println(document.toJson());
+                
+                for(Object o : document.values()) {
+                    //System.out.println(o.getClass().getName() +" : " + o.toString());
+                    //stringListFromDocument.add(o.toString());
+                    listO.add(document.getString("_id"));
+                    listO.add(document.getDouble("Total"));
+                }
+            }
+        });
+        
+        /*
+        System.out.println("Final: ");
+        for(int i=0; i<listO.size();i++){
+            System.out.println(listO.get(i) + ": " + listO.get(i+1));
+            i += 1;
+        }
+        */
+        CalculosMetricas.CalculoMetricas(listO);
+        
+    }
     
     
     public static void obtemDiametroFlanges() {
@@ -217,10 +268,7 @@ public class MongoConsultas {
     
     
     
-    public static void main(String[] args) {
-        obtemTotalArea();
-        //obtemDiametroFlanges();
-    }
+
     
     
     // db.pt.aggregate([

@@ -68,8 +68,9 @@ public class LeituraXLS {
    public static void testaLer( MongoDatabase db, String fileName) throws IOException, BiffException{
         //System.out.println("Entramo na funcao");
         
-        String filePath = "/plataformFiles/" + fileName;
- 
+        //String filePath = "/plataformFiles/" + fileName;
+       String filePath = "src/documentos_geiza/" + fileName;
+       
         WorkbookSettings ws = new WorkbookSettings();// resolver o problema de encoding.
         ws.setEncoding("Cp1252");//enconding com utf-8
        
@@ -104,10 +105,8 @@ public class LeituraXLS {
                                 
                         if(cell.getType() != CellType.NUMBER){
                             String tempCell = "" + cell.getContents();
-                                // sout pra testar
                                 //System.out.println("String nao numero: " + tempCell);
                             tempCell = tempCell.replace(",", ".");
-                                // sout pra testar
                                 //System.out.println("String após replace: " + tempCell);
                             value = Double.parseDouble(tempCell);
                         }
@@ -115,10 +114,21 @@ public class LeituraXLS {
                             NumberCell nc = (NumberCell) cell;
                             value = nc.getValue();
                         }
-                                
                         //System.out.println("value: " + value + " vem do excel: " + cell.getContents());
-                        
                         doc.append("area",  value);
+                        
+                        /*
+                    } else if ( j==1 ) {
+                        String cellValue = cell.getContents();
+                        String parts[] = cellValue.split("_");
+                        String modulo = parts[1];
+                        String setor = parts[2];
+                        
+                        doc.append("#grupo", cellValue);
+                        doc.append("modulo", modulo);
+                        doc.append("setor", setor);
+                        */
+                        
                     } else if( j==2 ) {
                         String cellZone = cell.getContents();
                         
@@ -154,10 +164,10 @@ public class LeituraXLS {
     //comandos importantes:
     // Deletar toda a collection db.pt.remove({})
     // db.pt.findOne({"#nome":"FLG-04A 420"})
-    // db.pt.aggregate([{ $group : { _id:"$#subgrupo",total: {$sum:"$area"} } }])
+    // db.pt.aggregate([{$group:{_id:"$#subgrupo",total:{$sum:"$area"}}},{$sort:{_id:1}}])
     // db.pt.count({ "#subgrupo" : "zona A"})
     // db.pt.count({"supgrupo-zona":/.*Alta.*/})
-	// db.pt.find().limit(-1).skip(x).next()   // pegar registro aleatório
+    // db.pt.find().limit(-1).skip(x).next()   // pegar registro aleatório
     
     
     // Item 1): db.pt.aggregate([ {$match:{"#nome":/.*/} }, {$match:{"subgrupo-zona":/.*Alta.*/} }, {$group:{_id:"$subgrupo-zona",total:{$sum:"$area"}}}, {$sort: { total: -1 }} ])
