@@ -34,6 +34,7 @@ public class CalculosMetricas {
         List<String> listNames = new ArrayList<>();
         List<Double> listArea = new ArrayList<>();
         List<Double> listPrice = new ArrayList<>();
+        List<Double> listHomenM2 = new ArrayList<>();
         
         for(int i=0;i<listO.size();i++){
             if(i%2==0){
@@ -43,15 +44,16 @@ public class CalculosMetricas {
                 double d = (Double) listO.get(i);
                 listArea.add(d);
                 listPrice.add(calcPrice(d));
+                listHomenM2.add(calcHomemPorM2(d));
             }
         }
         
         
         System.out.println("Sizes:");
-        System.out.println("Names: "+listNames.size() + "; Area: "+listArea.size() + "; Prices: " + listPrice.size());
+        System.out.println("Names: "+listNames.size() + "; Area: "+listArea.size() + "; Prices: " + listPrice.size()+ "; HomemM2: " + listHomenM2.size());
         
         for(int j=0; j<listNames.size();j++){
-            System.out.println(listNames.get(j) + ": " + listArea.get(j) + " = " + listPrice.get(j));
+            System.out.println(listNames.get(j) + ": " + listArea.get(j) + " = " + listPrice.get(j)+ " = " + listHomenM2.get(j));
         }
         
     }
@@ -64,12 +66,18 @@ public class CalculosMetricas {
         
         double desempenho = 112 * area;
         
-        double hidrojato = 0;
+        double hidrojato = 3240.28 * 30;
         //hidrojato = 3240.28 * dias ??
         
         double price = tratamento + desempenho + hidrojato;
         
         return price;
+    }
+    
+    public static double calcHomemPorM2(double area){
+        double totalDeHomensTrabalhando = 30;
+        
+        return area/totalDeHomensTrabalhando;
     }
     
 }

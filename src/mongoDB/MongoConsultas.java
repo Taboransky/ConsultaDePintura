@@ -32,11 +32,44 @@ public class MongoConsultas {
     
     
     public static void main(String[] args) {
-        obtemAreaPorSetor();
+        obtemAreaPorZona();
+        //obtemAreaPorSetor();
         //obtemTotalArea(); 
         //obtemDiametroFlanges();
     }
     
+    //calcular o custo por zona
+    public static void obtemAreaPorZona(){
+    
+         MongoCollection<Document> ptCollection = initiateMongoCollection();
+        String regexNome = "^.*$";
+        
+        AggregateIterable<Document> agg = ptCollection.aggregate(asList(
+            new Document("$match",new Document("#nome",java.util.regex.Pattern.compile(regexNome))),
+            new Document("$group",new Document("_id","$subgrupo-zona").append("Total", new Document("$sum","$area"))),
+            new Document("$sort", new Document("_id",1))
+        ));
+    
+        List<String> stringListFromDocument = new ArrayList<>();
+        List<Object> listO = new ArrayList<>();
+        
+        agg.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                //System.out.println(document.toJson());
+                
+                for(Object o : document.values()) {
+                    //System.out.println(o.getClass().getName() +" : " + o.toString());
+                    //stringListFromDocument.add(o.toString());
+                    listO.add(document.getString("_id"));
+                    listO.add(document.getDouble("Total"));
+                }
+            }
+        });
+        
+        CalculosMetricas.CalculoMetricas(listO);
+    
+    }
     
     public static void obtemAreaPorSetor(){
         // db.pt.aggregate([{$match:{"#nome":/.*/}},{$group:{_id:"$#grupo",total:{$sum:"$area"}}},{$sort:{_id:1}}])

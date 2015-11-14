@@ -164,7 +164,8 @@ public class LeituraXLS {
     //comandos importantes:
     // Deletar toda a collection db.pt.remove({})
     // db.pt.findOne({"#nome":"FLG-04A 420"})
-    // db.pt.aggregate([{$group:{_id:"$#subgrupo",total:{$sum:"$area"}}},{$sort:{_id:1}}])
+    // it
+    
     // db.pt.count({ "#subgrupo" : "zona A"})
     // db.pt.count({"supgrupo-zona":/.*Alta.*/})
     // db.pt.find().limit(-1).skip(x).next()   // pegar registro aleatório
