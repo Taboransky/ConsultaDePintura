@@ -33,7 +33,13 @@ import jxl.NumberCell;
  */
 public class LeituraXLS {
     
-   public static void main(String[] args) 
+   
+   public LeituraXLS(){
+   
+   }
+    
+    
+   public static void lerArquivos() 
    {
        MongoClient mongoClient = new MongoClient(); //conect ao MongoDB
        MongoDatabase db = mongoClient.getDatabase("plataforma");//Conecta ao banco de dados
@@ -48,7 +54,7 @@ public class LeituraXLS {
        {System.out.println(e.getMessage());};
       
    }
-   
+
    public static void lerTudo(MongoDatabase db) throws IOException, BiffException {
        //File folder = new File("/plataformFiles");
        File folder = new File("src/documentos_geiza");

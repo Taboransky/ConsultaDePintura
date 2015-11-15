@@ -6,7 +6,9 @@
 
 package consultadepintura;
 
+import java.util.Scanner;
 import mongoDB.MongoConsultas;
+import testesExcel.LeituraXLS;
 
 /**
  *
@@ -19,8 +21,45 @@ public class ConsultaDePintura {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Scanner reader = new Scanner(System.in); 
+        int option = 0;
+        LeituraXLS leitura = new LeituraXLS();
         
-        MongoConsultas.obtemTotalArea();
+        while( option != 4   ){
+               
+            System.out.println("O que deseja fazer?");
+            System.out.println("===================");
+            System.out.println("1 - Ler arquivos");
+            System.out.println("2 - Obter Area todal");
+            System.out.println("3 - Obter Area todal por Zonas e homem hora");
+            System.out.println("4 - Sair");
+
+
+            option = reader.nextInt(); 
+
+            switch(option){
+                case 1: leitura.lerArquivos();                   
+                    break; 
+                    
+                case 2: MongoConsultas.obtemTotalArea();                   
+                    break; 
+                    
+                case 3: MongoConsultas.obtemAreaPorZona();                   
+                    break;
+                    
+                case 4:                    
+                    break;
+                    
+                default: System.out.println("Escolha um opcao correta");                   
+                    break;
+
+            }
+        
+        }
+        
+        
+        
+        //MongoConsultas.obtemTotalArea();
     }
     
 }

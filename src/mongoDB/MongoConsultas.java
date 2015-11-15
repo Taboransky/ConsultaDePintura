@@ -68,7 +68,6 @@ public class MongoConsultas {
         });
         
         CalculosMetricas.CalculoMetricas(listO);
-    
     }
     
     public static void obtemAreaPorSetor(){

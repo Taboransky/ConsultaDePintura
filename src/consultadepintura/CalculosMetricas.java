@@ -8,6 +8,8 @@ package consultadepintura;
 
 import java.util.ArrayList;
 import java.util.List;
+import static mongoDB.MongoConsultas.filterSameCompNo2;
+import testesExcel.EscrituraXLS;
 
 /**
  *
@@ -54,8 +56,7 @@ public class CalculosMetricas {
         
         for(int j=0; j<listNames.size();j++){
             System.out.println(listNames.get(j) + ": " + listArea.get(j) + " = " + listPrice.get(j)+ " = " + listHomenM2.get(j));
-        }
-        
+        }   
     }
     
     

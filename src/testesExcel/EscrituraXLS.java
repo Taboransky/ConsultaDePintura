@@ -137,5 +137,52 @@ public class EscrituraXLS {
  
         } catch(Exception e)
        {System.out.println(e.getMessage());};
+    }
+    
+    
+    
+    public static void writeZonaHH(List<String> list) {
+        Label labelToAdd;
+        Number numToAdd;
+        int linha=1, coluna=0;
+        
+        try {
+            File exlFile = new File("src/output/ZonaHH.xls");
+            WritableWorkbook writableWorkbook = Workbook.createWorkbook(exlFile);
+ 
+            WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
+            
+            writableSheet.addCell(new Label(0,0,"Zona"));
+            writableSheet.addCell(new Label(1,0,"Area Total"));
+            writableSheet.addCell(new Label(1,0,"Prices"));
+            writableSheet.addCell(new Label(1,0,"Homem M2"));
+            
+            for(Object o : list) {
+                    if(o.getClass() == String.class) {
+                        String s = o.toString();
+                        labelToAdd = new Label(coluna, linha, s);
+                        writableSheet.addCell(labelToAdd);
+
+                    } else
+                        if (o.getClass() == Double.class) {
+                            Double d = Double.parseDouble(o.toString());
+                            numToAdd = new Number(coluna, linha, d);
+                            writableSheet.addCell(numToAdd);
+                        }
+                    coluna++;
+                    if(coluna>1) {
+                        linha++;
+                        coluna=0;
+                    }
+                }
+
+            //Write and close the workbook
+            writableWorkbook.write();
+            writableWorkbook.close();
+            System.out.println("Arquivo salvo: " + exlFile.getName());
+ 
+        } catch(Exception e){
+            System.out.println(e.getMessage());
         }
     }
+}
