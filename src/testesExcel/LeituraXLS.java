@@ -48,7 +48,6 @@ public class LeituraXLS {
        
        System.out.println("tamo na Main");
        try{ 
-           //testaLer(db);
            lerTudo(db);
        } catch(Exception e)
        {System.out.println(e.getMessage());};
@@ -59,12 +58,10 @@ public class LeituraXLS {
        //File folder = new File("/plataformFiles");
        File folder = new File("src/documentos_geiza");
        File[] listOfFiles = folder.listFiles();
-       //ArrayList<String> listOfFileName = new ArrayList<String>();
        
        
        for (File file : listOfFiles) {
             if (file.isFile()) {
-                //listOfFileName.add(file.getName());
                 testaLer(db, file.getName());
             }
         }
@@ -74,7 +71,6 @@ public class LeituraXLS {
    public static void testaLer( MongoDatabase db, String fileName) throws IOException, BiffException{
         //System.out.println("Entramo na funcao");
         
-        //String filePath = "/plataformFiles/" + fileName;
        String filePath = "src/documentos_geiza/" + fileName;
        
         WorkbookSettings ws = new WorkbookSettings();// resolver o problema de encoding.
@@ -85,67 +81,35 @@ public class LeituraXLS {
         Sheet sheet = workbook.getSheet(0);
       
       
-        //JSONObject json = new JSONObject();
-        //JSONArray rows = new JSONArray();
-      
         for(int i=1;i<sheet.getRows();i++){
-            //JSONObject jRow = new JSONObject();
-            //JSONArray cells = new JSONArray();
             Document doc = new Document(); //Mudei para o Tipo Document, pq o mongo pede esse tipo ao invez do json, ele faz a convercao dele de document para json
             
             for(int j=0;j<sheet.getColumns();j++){
                   Cell cell=sheet.getCell(j,i);
                   if(  !cell.getContents().isEmpty() ){
-                   // jRow.put( sheet.getCell(j,0).getContents(),  cell.getContents() );
                     
                     if( sheet.getCell(j,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
-                        /*
-                        if (A.getType() == CellType.NUMBER) {
-                            NumberCell nc = (NumberCell) A;
-                            double doubleA = nc.getValue();
-                            // this is a double containing the exact numeric value that was stored 
-                            // in the spreadsheet
-                        }
-                        */
                         double value;
                                 
                         if(cell.getType() != CellType.NUMBER){
                             String tempCell = "" + cell.getContents();
-                                //System.out.println("String nao numero: " + tempCell);
                             tempCell = tempCell.replace(",", ".");
-                                //System.out.println("String após replace: " + tempCell);
                             value = Double.parseDouble(tempCell);
                         }
                         else {
                             NumberCell nc = (NumberCell) cell;
                             value = nc.getValue();
                         }
-                        //System.out.println("value: " + value + " vem do excel: " + cell.getContents());
                         doc.append("area",  value);
-                        
-                        /*
-                    } else if ( j==1 ) {
-                        String cellValue = cell.getContents();
-                        String parts[] = cellValue.split("_");
-                        String modulo = parts[1];
-                        String setor = parts[2];
-                        
-                        doc.append("#grupo", cellValue);
-                        doc.append("modulo", modulo);
-                        doc.append("setor", setor);
-                        */
                         
                     } else if( j==2 ) {
                         String cellZone = cell.getContents();
                         
                         
                         // Padronizando a coluna de zonas, e tratando de typos (Zona Alta X; Zona X Alta; Zona alta X; Zona altaX; Zona baixa  X)
-                        //if (cellZone.matches("(\\w+) (Alta) (\\w+)")){
                         if (cellZone.matches("(\\w+) (Alta) (\\w+)") || cellZone.matches("(\\w+) (alta) (\\w+)")){
-                            //System.out.println("Achei um! " + cellZone);
                             cellZone = cellZone.replaceAll("(\\w+) (Alta) (\\w+)", "$1 $3 $2");
                             cellZone = cellZone.replaceAll("(\\w+) (alta) (\\w+)", "$1 $3 Alta");
-                            //System.out.println("Novo valor: " + cellZone);
                         } else if(cellZone.matches("(\\w+) (baixa)(\\s+)(\\w+)")) {
                             cellZone = cellZone.replaceAll("(\\w+) (baixa) (\\w+)", "$1 $4");
                         } else if(cellZone.matches("(\\w+) (alta)(\\w+)")){
@@ -160,18 +124,8 @@ public class LeituraXLS {
                       
                   }
             }
-               //rows.put( jRow );
                db.getCollection("pt").insertOne( doc );//salvar os documentos na collection pt.
-               //System.out.println(jRow);
-             
         }
-      
-
-    // Create the JSON.
-    //json.put( "rows", rows );
-
-    // Get the JSON text.
-    //System.out.println(json.toString());
 
         
     workbook.close();

@@ -69,7 +69,6 @@ public class CalculosMetricas {
         double desempenho = 112 * area;
         
         double hidrojato = 3240.28 * 30;
-        //hidrojato = 3240.28 * dias ??
         
         double price = tratamento + desempenho + hidrojato;
         

@@ -38,17 +38,14 @@ public class EscrituraXLS {
             writableSheet.addCell(new Label(2,0,"Diametro 2"));
             
                 for(Object o : list) {
-                    //System.out.println("Objeto original: " + o.toString());
                     if(o.getClass() == String.class) {
                         String s = o.toString();
-                        //System.out.println("Achei uma String: " + s);
                         labelToAdd = new Label(coluna, linha, s);
                         writableSheet.addCell(labelToAdd);
 
                     } else
                         if (o.getClass() == Double.class) {
                             Double d = Double.parseDouble(o.toString());
-                            //System.out.println("Achei um Double: "+ d);
                             numToAdd = new Number(coluna, linha, d);
                             writableSheet.addCell(numToAdd);
                         }
@@ -85,17 +82,14 @@ public class EscrituraXLS {
             writableSheet.addCell(new Label(1,0,"Area Total"));
             
             for(Object o : list) {
-                    //System.out.println("Objeto original: " + o.toString());
                     if(o.getClass() == String.class) {
                         String s = o.toString();
-                        //System.out.println("Achei uma String: " + s);
                         labelToAdd = new Label(coluna, linha, s);
                         writableSheet.addCell(labelToAdd);
 
                     } else
                         if (o.getClass() == Double.class) {
                             Double d = Double.parseDouble(o.toString());
-                            //System.out.println("Achei um Double: "+ d);
                             numToAdd = new Number(coluna, linha, d);
                             writableSheet.addCell(numToAdd);
                         }
@@ -105,30 +99,6 @@ public class EscrituraXLS {
                         coluna=0;
                     }
                 }
-            
-            /*
-            for(String s : list){
-                
-                labelToAdd = new Label(coluna, linha, s);
-                writableSheet.addCell(labelToAdd);
-                
-                coluna++;
-                if(coluna>(1)) {
-                    linha++;
-                    coluna=0;
-                }
-            }
-            */
-            
-            /*
-            Label label = new Label(0, 0, "Label (String)");
-            DateTime date = new DateTime(1, 0, new Date());
-            Boolean bool = new Boolean(2, 0, true);
-            Number num = new Number(3, 0, 9.99);
-            
-            //Add the created Cells to the sheet
-            //writableSheet.addCell(label);
-            */
  
             //Write and close the workbook
             writableWorkbook.write();
