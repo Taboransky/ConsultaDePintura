@@ -58,13 +58,17 @@ public class LeituraXLS {
        //File folder = new File("/plataformFiles");
        File folder = new File("src/documentos_geiza");
        File[] listOfFiles = folder.listFiles();
+       int qtdLidos = 0;
        
+       System.out.println("Total de arquivos" + listOfFiles.length);
        
        for (File file : listOfFiles) {
             if (file.isFile()) {
                 testaLer(db, file.getName());
+                qtdLidos++;
             }
         }
+       System.out.println("Total de arquivos lidos: " + qtdLidos);
        
    }
    
@@ -77,7 +81,7 @@ public class LeituraXLS {
         ws.setEncoding("Cp1252");//enconding com utf-8
        
         Workbook workbook = Workbook.getWorkbook(new File(filePath),ws);
-        System.out.println("li o arquivo");
+        System.out.println("Abri o arquivo: " + fileName);
         Sheet sheet = workbook.getSheet(0);
       
       
@@ -106,16 +110,18 @@ public class LeituraXLS {
                         String cellZone = cell.getContents();
                         
                         
-                        // Padronizando a coluna de zonas, e tratando de typos (Zona Alta X; Zona X Alta; Zona alta X; Zona altaX; Zona baixa  X)
-                        if (cellZone.matches("(\\w+) (Alta) (\\w+)") || cellZone.matches("(\\w+) (alta) (\\w+)")){
+                        // Padronizando a coluna de zonas, e tratando de typos (Zona Alta X; Zona X Alta; Zona alta X; Zona altaX; Zona baixa  X; Zona L Alta ;)
+                        if (cellZone.matches("(\\w+) (Alta) (\\w+)")) {
                             cellZone = cellZone.replaceAll("(\\w+) (Alta) (\\w+)", "$1 $3 $2");
+                        } else if (cellZone.matches("(\\w+) (alta) (\\w+)")){
                             cellZone = cellZone.replaceAll("(\\w+) (alta) (\\w+)", "$1 $3 Alta");
                         } else if(cellZone.matches("(\\w+) (baixa)(\\s+)(\\w+)")) {
-                            cellZone = cellZone.replaceAll("(\\w+) (baixa) (\\w+)", "$1 $4");
+                            cellZone = cellZone.replaceAll("(\\w+) (baixa) (\\w+)", "$1 $3");
                         } else if(cellZone.matches("(\\w+) (alta)(\\w+)")){
                             cellZone = cellZone.replaceAll("(\\w+) (alta)(\\w+)", "$1 $3 Alta");
+                        } else if(cellZone.matches("(Zona) (\\w+) (Alta)(\\s+)")) {
+                            cellZone = cellZone.replaceAll("(Zona) (\\w+) (Alta)(\\s+)", "$1 $2 $3");
                         }
-                        
                         doc.append("subgrupo-zona", cellZone);
                           
                     } else {
@@ -127,7 +133,6 @@ public class LeituraXLS {
                db.getCollection("pt").insertOne( doc );//salvar os documentos na collection pt.
         }
 
-        
     workbook.close();
     
     //comandos importantes:
