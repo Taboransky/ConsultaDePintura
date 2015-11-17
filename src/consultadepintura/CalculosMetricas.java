@@ -58,6 +58,8 @@ public class CalculosMetricas {
         for(int j=0; j<listNames.size();j++){
             System.out.println(listNames.get(j) + ":  " + listArea.get(j) + " m2;  R$ " + listPrice.get(j)+ ";  " + listHomenM2.get(j));
         }   
+        
+        EscrituraXLS.writeZonaHH( listNames, listArea, listPrice, listHomenM2);
     }
     
     

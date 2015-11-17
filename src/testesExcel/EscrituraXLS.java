@@ -111,7 +111,7 @@ public class EscrituraXLS {
     
     
     
-    public static void writeZonaHH(List<String> list) {
+    public static void writeZonaHH( List<String> listNames, List<Double> listArea, List<Double> listPrice, List<Double> listHomenM2) {
         Label labelToAdd;
         Number numToAdd;
         int linha=1, coluna=0;
@@ -124,27 +124,40 @@ public class EscrituraXLS {
             
             writableSheet.addCell(new Label(0,0,"Zona"));
             writableSheet.addCell(new Label(1,0,"Area Total"));
-            writableSheet.addCell(new Label(1,0,"Prices"));
-            writableSheet.addCell(new Label(1,0,"Homem M2"));
+            writableSheet.addCell(new Label(2,0,"Prices"));
+            writableSheet.addCell(new Label(3,0,"Homem M2"));
             
-            for(Object o : list) {
-                    if(o.getClass() == String.class) {
-                        String s = o.toString();
-                        labelToAdd = new Label(coluna, linha, s);
-                        writableSheet.addCell(labelToAdd);
-
-                    } else
-                        if (o.getClass() == Double.class) {
-                            Double d = Double.parseDouble(o.toString());
-                            numToAdd = new Number(coluna, linha, d);
-                            writableSheet.addCell(numToAdd);
-                        }
-                    coluna++;
-                    if(coluna>1) {
-                        linha++;
-                        coluna=0;
-                    }
-                }
+            
+            for( String nome : listNames){
+                labelToAdd = new Label(0, linha, nome);
+                writableSheet.addCell(labelToAdd);
+                linha++;
+            }
+            
+            linha=1;
+            
+            for( Double area : listArea){
+                numToAdd = new Number(1, linha, area);
+                writableSheet.addCell(numToAdd);
+                linha++;
+            }
+            
+            linha=1;
+            
+            for( Double price : listPrice){
+                numToAdd = new Number(2, linha, price);
+                writableSheet.addCell(numToAdd);
+                linha++;
+            }
+            
+            linha=1;
+            
+            for( Double hh : listHomenM2){
+                numToAdd = new Number(3, linha, hh);
+                writableSheet.addCell(numToAdd);
+                linha++;
+            }
+            
 
             //Write and close the workbook
             writableWorkbook.write();
