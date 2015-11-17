@@ -38,6 +38,7 @@ public class CalculosMetricas {
         List<Double> listPrice = new ArrayList<>();
         List<Double> listHomenM2 = new ArrayList<>();
         
+        
         for(int i=0;i<listO.size();i++){
             if(i%2==0){
                 listNames.add( (String) listO.get(i));
@@ -55,7 +56,7 @@ public class CalculosMetricas {
         System.out.println("Names: "+listNames.size() + "; Area: "+listArea.size() + "; Prices: " + listPrice.size()+ "; HomemM2: " + listHomenM2.size());
         
         for(int j=0; j<listNames.size();j++){
-            System.out.println(listNames.get(j) + ": " + listArea.get(j) + " = " + listPrice.get(j)+ " = " + listHomenM2.get(j));
+            System.out.println(listNames.get(j) + ":  " + listArea.get(j) + " m2;  R$ " + listPrice.get(j)+ ";  " + listHomenM2.get(j));
         }   
     }
     

@@ -138,11 +138,20 @@ public class LeituraXLS {
                     } else if( j==2 ) {
                         String cellZone = cell.getContents();
                         
-                        if (cellZone.matches("(\\w+) (Alta) (\\w+)")){
+                        
+                        // Padronizando a coluna de zonas, e tratando de typos (Zona Alta X; Zona X Alta; Zona alta X; Zona altaX; Zona baixa  X)
+                        //if (cellZone.matches("(\\w+) (Alta) (\\w+)")){
+                        if (cellZone.matches("(\\w+) (Alta) (\\w+)") || cellZone.matches("(\\w+) (alta) (\\w+)")){
                             //System.out.println("Achei um! " + cellZone);
                             cellZone = cellZone.replaceAll("(\\w+) (Alta) (\\w+)", "$1 $3 $2");
+                            cellZone = cellZone.replaceAll("(\\w+) (alta) (\\w+)", "$1 $3 Alta");
                             //System.out.println("Novo valor: " + cellZone);
+                        } else if(cellZone.matches("(\\w+) (baixa)(\\s+)(\\w+)")) {
+                            cellZone = cellZone.replaceAll("(\\w+) (baixa) (\\w+)", "$1 $4");
+                        } else if(cellZone.matches("(\\w+) (alta)(\\w+)")){
+                            cellZone = cellZone.replaceAll("(\\w+) (alta)(\\w+)", "$1 $3 Alta");
                         }
+                        
                         doc.append("subgrupo-zona", cellZone);
                           
                     } else {

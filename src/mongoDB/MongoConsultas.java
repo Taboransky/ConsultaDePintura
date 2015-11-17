@@ -32,8 +32,8 @@ public class MongoConsultas {
     
     
     public static void main(String[] args) {
-        obtemAreaPorZona();
-        //obtemAreaPorSetor();
+        //obtemAreaPorZona();
+        obtemAreaPorSetor();
         //obtemTotalArea(); 
         //obtemDiametroFlanges();
     }
@@ -41,7 +41,7 @@ public class MongoConsultas {
     //calcular o custo por zona
     public static void obtemAreaPorZona(){
     
-         MongoCollection<Document> ptCollection = initiateMongoCollection();
+        MongoCollection<Document> ptCollection = initiateMongoCollection();
         String regexNome = "^.*$";
         
         AggregateIterable<Document> agg = ptCollection.aggregate(asList(
@@ -50,19 +50,20 @@ public class MongoConsultas {
             new Document("$sort", new Document("_id",1))
         ));
     
-        List<String> stringListFromDocument = new ArrayList<>();
         List<Object> listO = new ArrayList<>();
         
         agg.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                //System.out.println(document.toJson());
-                
+                int control = 1;  //variável para controlar a leitura (estava gravando dobrado)
                 for(Object o : document.values()) {
-                    //System.out.println(o.getClass().getName() +" : " + o.toString());
-                    //stringListFromDocument.add(o.toString());
-                    listO.add(document.getString("_id"));
-                    listO.add(document.getDouble("Total"));
+                    if(control==1){
+                        listO.add(document.getString("_id"));
+                        control = 2;
+                    } else {
+                        listO.add(document.getDouble("Total"));
+                        control = 1;
+                    }
                 }
             }
         });
@@ -71,7 +72,6 @@ public class MongoConsultas {
     }
     
     public static void obtemAreaPorSetor(){
-        // db.pt.aggregate([{$match:{"#nome":/.*/}},{$group:{_id:"$#grupo",total:{$sum:"$area"}}},{$sort:{_id:1}}])
         
         MongoCollection<Document> ptCollection = initiateMongoCollection();
         String regexNome = "^.*$";
@@ -83,32 +83,25 @@ public class MongoConsultas {
         ));
         
         
-        List<String> stringListFromDocument = new ArrayList<>();
         List<Object> listO = new ArrayList<>();
         
         agg.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                //System.out.println(document.toJson());
-                
+                int control=1;
                 for(Object o : document.values()) {
-                    //System.out.println(o.getClass().getName() +" : " + o.toString());
-                    //stringListFromDocument.add(o.toString());
-                    listO.add(document.getString("_id"));
-                    listO.add(document.getDouble("Total"));
+                    if(control==1){
+                        listO.add(document.getString("_id"));
+                        control = 2;
+                    } else {
+                        listO.add(document.getDouble("Total"));
+                        control = 1;
+                    }
                 }
             }
         });
         
-        /*
-        System.out.println("Final: ");
-        for(int i=0; i<listO.size();i++){
-            System.out.println(listO.get(i) + ": " + listO.get(i+1));
-            i += 1;
-        }
-        */
         CalculosMetricas.CalculoMetricas(listO);
-        
     }
     
     
@@ -116,7 +109,6 @@ public class MongoConsultas {
         
         MongoCollection<Document> ptCollection = initiateMongoCollection();
         String regexFLG = "^FLG.*$";
-        //String regexFLG = "^FLG-04A$";
         List<String> listStringFromDocument = new ArrayList<>();
         
         List<Object> listO = new ArrayList<>();
@@ -125,26 +117,16 @@ public class MongoConsultas {
         Block<Document> printBlock = new Block<Document>() {
             @Override
             public void apply(Document document) {
-                //System.out.println(document.toJson());
-                //System.out.println(document.getString("*Comp no") +" - "+ document.getString("#nome") + " - " + document.getString("*NPD"));
                 int column=0; // colum indica cada célula/key do elemento
-                //System.out.println("Tamanho de .values().size = "+document.values().size());
                 for(Object o : document.values()){
-                   // System.out.println("o to String retorna: " + o.toString());
                     if (o.toString().equals(document.getString("*Comp no")) && column!=1){ // tive que botar column!=1 pois alguns #nome eram iguais a *Comp no (ou seja, duplicava)
                         listStringFromDocument.add(document.getString("*Comp no")); 
                         listStringFromDocument.add(document.getString("*NPD")); //salva primeiro *Comp no e *NPD em um array de String
-                        
-                        //System.out.println(document.getString("*Comp no"));
-                        //System.out.println(document.getString("*NPD"));
                     }
-                    //System.out.println("Coluna: " + column);
                     column++;
                 }
-                //System.out.println("Tamanho de listString: " + listStringFromDocument.size());
             }
         };
-        //ptCollection.find(eq("*Comp no",java.util.regex.Pattern.compile(regexFLG))).limit(2).forEach(printBlock);
         ptCollection.find(eq("*Comp no",java.util.regex.Pattern.compile(regexFLG))).sort(new Document("*Comp no",1)).forEach(printBlock);
         
         
@@ -154,19 +136,15 @@ public class MongoConsultas {
             if (j%2==0){
                 listO.add(listStringFromDocument.get(j));
             } else {
-                //String[] parts = listFromDocument.get(j).split(" ");
                 String[] parts = listStringFromDocument.get(j).replaceAll("\"", "").split(" "); // separa *NPD 1" 1"  em 2 elementos 1
                 
                 listO.add(inchesToCentimeters(parts[0]));
                 listO.add(inchesToCentimeters(parts[1]));
             }
         }
-        
-        System.out.println("listO.size() : " + listO.size());
         EscrituraXLS.writeDiameter(filterSameCompNo2(listO));
-        //EscrituraXLS.writeDiameter(listO); //listO = [String, double, double]
 
-        // db.pt.find({"*Comp no":"FLG-04A","*NPD":/.*/},{"*NPD":1,"*Comp no":1}).pretty()
+        // db.pt.find({"*Comp no":"FLG","*NPD":/.*/},{"*NPD":1,"*Comp no":1}).pretty()
     }
     
     
@@ -176,18 +154,6 @@ public class MongoConsultas {
         
         System.out.println(ptCollection.count());
         
-        /*
-        AggregateIterable<Document> iterable = database.getCollection("pt").aggregate(asList(
-        new Document("$group", new Document("_id", "$#subgrupo").append("Area", new Document("$sum","$area")))));
-        
-        iterable.forEach(new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                System.out.println(document.toJson());
-            }
-        });
-        */
-        
         String regexpN = "^.*$";
         String regexpSG =  "^.*Alta.*$";
         AggregateIterable<Document> agg = ptCollection.aggregate(asList(
@@ -195,27 +161,20 @@ public class MongoConsultas {
                 new Document("$match", new Document("subgrupo-zona",java.util.regex.Pattern.compile(regexpSG))),
                 new Document("$group", new Document("_id", "$subgrupo-zona").append("Area", new Document("$sum","$area"))),
                 new Document("$sort", new Document("Area",-1))
-                //new Document("$sort", new Document("_id",1))
         ));
         
         
         List<String> sToPass = new ArrayList<>();
-        //List<Object> listO = new ArrayList<>();
         
         agg.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                //System.out.println(document.toJson());
                 for(Object o : document.values()) {
-                    //System.out.println(o.getClass().getName() +" : " + o.toString());
                     sToPass.add(o.toString());
-                    //listO.add(o);
                 }     
             }
-            
         });
         EscrituraXLS.writeZoneArea(sToPass);
-        //EscrituraXLS.writeZoneArea(listO);
     }
     
     
@@ -227,18 +186,17 @@ public class MongoConsultas {
         
         System.out.println("originalList.size() : " + originalList.size());
         for(int i=0; i<originalList.size(); i++){
-            if(i%3==0){
-                if(originalList.get(i).toString().equals(singularComp)) {
+            if(i%3==0){ // 3 colunas
+                if(originalList.get(i).toString().equals(singularComp)) { // se já existir essa Label, somar os diametros
                     d1 += Double.parseDouble( originalList.get(i+1).toString() );
                     d2 += Double.parseDouble( originalList.get(i+2).toString() );
                     i += 2;
                 } else {
-                    returnList.add(singularComp);
+                    returnList.add(singularComp); //se não, gravar na nova Lista
                     returnList.add(d1);
                     returnList.add(d2);
                     
-                    
-                    singularComp = originalList.get(i).toString();
+                    singularComp = originalList.get(i).toString(); // e pegar um novo Label e zerar os diametros
                     d1 = Double.parseDouble( originalList.get(i+1).toString() );
                     d2 = Double.parseDouble( originalList.get(i+2).toString() );
                     i += 2;
@@ -256,8 +214,6 @@ public class MongoConsultas {
         double aux;
         final double INCH_TO_CM = 2.54;
         
-        //System.out.println("Entrou: " + inches);
-        
         if(inches.contains("1/2")) {
             if(inches.contains("-1/2"))
             {
@@ -266,7 +222,6 @@ public class MongoConsultas {
             } else {
                 aux = 0.5;
             }
-            //System.out.println("Uma string com meios: Antes: "+parts[0]+" ; depois de convertido: " + aux);
         } else 
         if(inches.contains("3/4")) {
             if(inches.contains("-3/4"))
@@ -276,15 +231,10 @@ public class MongoConsultas {
             } else {
                 aux = 0.75;
             }
-            
         } else  {
             aux = Double.parseDouble(inches);
-            //System.out.println("Não alterou: " + aux);
         }
         aux = aux * INCH_TO_CM;
-        //cm = String.valueOf(aux);
-        
-        //System.out.println("Valor final de aux: " + aux + "\n\n");
         
         return aux;
     }
