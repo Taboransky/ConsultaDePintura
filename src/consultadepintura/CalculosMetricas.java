@@ -38,6 +38,10 @@ public class CalculosMetricas {
         List<Double> listPrice = new ArrayList<>();
         List<Double> listHomenM2 = new ArrayList<>();
         
+        List<Double> listaTrataMentoSuperficiePreco = new ArrayList<>();
+        List<Double> listaApliocacaoDeTintaAltoDesempenhoProco = new ArrayList<>();
+        List<Double> listaEquipamentoPreco = new ArrayList<>();
+
         
         for(int i=0;i<listO.size();i++){
             if(i%2==0){
@@ -48,18 +52,13 @@ public class CalculosMetricas {
                 listArea.add(d);
                 listPrice.add(calcPrice(d));
                 listHomenM2.add(calcHomemPorM2(d));
+                listaTrataMentoSuperficiePreco.add( calcTratamentoSuperficie(d) );
+                listaApliocacaoDeTintaAltoDesempenhoProco.add( calcTintaDeAltoDesempenho(d) );
+                listaEquipamentoPreco.add(calcEquipamento(d));
             }
         }
         
-        
-        System.out.println("Sizes:");
-        System.out.println("Names: "+listNames.size() + "; Area: "+listArea.size() + "; Prices: " + listPrice.size()+ "; HomemM2: " + listHomenM2.size());
-        
-        for(int j=0; j<listNames.size();j++){
-            System.out.println(listNames.get(j) + ":  " + listArea.get(j) + " m2;  R$ " + listPrice.get(j)+ ";  " + listHomenM2.get(j));
-        }   
-        
-        EscrituraXLS.writeZonaHH( listNames, listArea, listPrice, listHomenM2);
+        EscrituraXLS.writeZonaHH( listNames, listArea, listPrice, listHomenM2,listaTrataMentoSuperficiePreco,listaApliocacaoDeTintaAltoDesempenhoProco,listaEquipamentoPreco );
     }
     
     
@@ -75,6 +74,24 @@ public class CalculosMetricas {
         double price = tratamento + desempenho + hidrojato;
         
         return price;
+    }
+    
+    public static double calcTratamentoSuperficie(double area){
+        double wj2 = 1.25 * 115 * area * 0.2;
+        double wj3 = 1 * 115 * area * 0.8;
+        double tratamento = wj2 + wj3;
+        
+        return tratamento;
+    }
+    
+    public static double calcTintaDeAltoDesempenho(double area){
+        double desempenho = 112 * area;  
+        return desempenho;
+    }
+     
+    public static double calcEquipamento(double area){
+        double hidrojato = 3240.28 * 30;  
+        return hidrojato;
     }
     
     public static double calcHomemPorM2(double area){

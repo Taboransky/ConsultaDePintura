@@ -7,6 +7,7 @@
 package testesExcel;
 
 
+import com.mongodb.DBCollection;
 import java.io.File;
 import java.io.IOException;
 
@@ -20,6 +21,7 @@ import jxl.read.biff.BiffException;
 
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import org.bson.Document;
@@ -61,6 +63,9 @@ public class LeituraXLS {
        int qtdLidos = 0;
        
        System.out.println("Total de arquivos" + listOfFiles.length);
+       
+       MongoCollection myCollection = db.getCollection("pt");
+       myCollection.drop();
        
        for (File file : listOfFiles) {
             if (file.isFile()) {

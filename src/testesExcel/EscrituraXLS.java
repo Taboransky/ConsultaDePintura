@@ -109,9 +109,8 @@ public class EscrituraXLS {
        {System.out.println(e.getMessage());};
     }
     
-    
-    
-    public static void writeZonaHH( List<String> listNames, List<Double> listArea, List<Double> listPrice, List<Double> listHomenM2) {
+
+    public static void writeZonaHH( List<String> listNames, List<Double> listArea, List<Double> listPrice, List<Double> listHomenM2, List<Double> listaTrataMentoSuperficiePreco,List<Double> listaApliocacaoDeTintaAltoDesempenhoProco,List<Double> listaEquipamentoPreco ) {
         Label labelToAdd;
         Number numToAdd;
         int linha=1, coluna=0;
@@ -124,10 +123,13 @@ public class EscrituraXLS {
             
             writableSheet.addCell(new Label(0,0,"Zona"));
             writableSheet.addCell(new Label(1,0,"Area Total"));
-            writableSheet.addCell(new Label(2,0,"Prices"));
-            writableSheet.addCell(new Label(3,0,"Homem M2"));
+            writableSheet.addCell(new Label(2,0,"Preco tratamento de superficie"));
+            writableSheet.addCell(new Label(3,0,"Preco aplicacao de tinta de alto desempenho"));
+            writableSheet.addCell(new Label(4,0,"Preco equipamento"));
+            writableSheet.addCell(new Label(5,0,"Preco total"));
+            writableSheet.addCell(new Label(6,0,"Homem M2"));
             
-            
+            //Nomes da zonas
             for( String nome : listNames){
                 labelToAdd = new Label(0, linha, nome);
                 writableSheet.addCell(labelToAdd);
@@ -135,7 +137,7 @@ public class EscrituraXLS {
             }
             
             linha=1;
-            
+            //Area total
             for( Double area : listArea){
                 numToAdd = new Number(1, linha, area);
                 writableSheet.addCell(numToAdd);
@@ -143,17 +145,41 @@ public class EscrituraXLS {
             }
             
             linha=1;
-            
-            for( Double price : listPrice){
-                numToAdd = new Number(2, linha, price);
+            //Preco do tratamento de superficie
+            for( Double area : listaTrataMentoSuperficiePreco){
+                numToAdd = new Number(2, linha, area);
                 writableSheet.addCell(numToAdd);
                 linha++;
             }
             
             linha=1;
+            //preco tinta de alto desempenho
+            for( Double price : listaApliocacaoDeTintaAltoDesempenhoProco){
+                numToAdd = new Number(3, linha, price);
+                writableSheet.addCell(numToAdd);
+                linha++;
+            }
             
+            linha=1;
+            //preco do equipamento
+            for( Double price : listaEquipamentoPreco){
+                numToAdd = new Number(4, linha, price);
+                writableSheet.addCell(numToAdd);
+                linha++;
+            }
+            
+            linha=1;
+            //preco total
+            for( Double price : listPrice){
+                numToAdd = new Number(5, linha, price);
+                writableSheet.addCell(numToAdd);
+                linha++;
+            }
+            
+            linha=1;
+            //Homem por metro quadrado
             for( Double hh : listHomenM2){
-                numToAdd = new Number(3, linha, hh);
+                numToAdd = new Number(6, linha, hh);
                 writableSheet.addCell(numToAdd);
                 linha++;
             }
