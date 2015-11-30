@@ -88,15 +88,30 @@ public class LeituraXLS {
         Workbook workbook = Workbook.getWorkbook(new File(filePath),ws);
         System.out.println("Abri o arquivo: " + fileName);
         Sheet sheet = workbook.getSheet(0);
-      
-      
+        
+        
         for(int i=1;i<sheet.getRows();i++){
             Document doc = new Document(); //Mudei para o Tipo Document, pq o mongo pede esse tipo ao invez do json, ele faz a convercao dele de document para json
             
             for(int j=0;j<sheet.getColumns();j++){
                   Cell cell=sheet.getCell(j,i);
-                  if(  !cell.getContents().isEmpty() ){
-                    
+                  
+                  if( !cell.getContents().isEmpty() ) {
+                      
+                      String fullName = fileName;
+                      //System.out.println("full name" + fullName);
+                      String[] noDot = fullName.split("\\.");
+                      //System.out.println("noDot" + noDot[0]);
+                      String[] noUnderline = noDot[0].split("_");
+                      //System.out.println("underine " + noUnderline[2]);
+                      String modulo = noUnderline[1];
+                      String setor = noUnderline[2];
+                        
+                      doc.append("#grupo", noDot[0]);
+                      doc.append("modulo", modulo);
+                      doc.append("setor", setor);
+                      
+                      
                     if( sheet.getCell(j,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
                         double value;
                                 
