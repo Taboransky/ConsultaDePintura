@@ -90,20 +90,18 @@ public class LeituraXLS {
         Sheet sheet = workbook.getSheet(0);
         
         
-        for(int i=1;i<sheet.getRows();i++){
+        for(int linha=1;linha<sheet.getRows();linha++){
             Document doc = new Document(); //Mudei para o Tipo Document, pq o mongo pede esse tipo ao invez do json, ele faz a convercao dele de document para json
             
-            for(int j=0;j<sheet.getColumns();j++){
-                  Cell cell=sheet.getCell(j,i);
+            for(int coluna=0;coluna<sheet.getColumns();coluna++){
+                  Cell cell=sheet.getCell(coluna,linha);
                   
-                  if( !cell.getContents().isEmpty() ) {
-                      
+                  //if( !cell.getContents().isEmpty() ) {
+                  if( (!cell.getContents().isEmpty()) && (!sheet.getCell(0, linha).getContents().isEmpty()) ) {  
+                  
                       String fullName = fileName;
-                      //System.out.println("full name" + fullName);
                       String[] noDot = fullName.split("\\.");
-                      //System.out.println("noDot" + noDot[0]);
                       String[] noUnderline = noDot[0].split("_");
-                      //System.out.println("underine " + noUnderline[2]);
                       String modulo = noUnderline[1];
                       String setor = noUnderline[2];
                         
@@ -112,7 +110,7 @@ public class LeituraXLS {
                       doc.append("setor", setor);
                       
                       
-                    if( sheet.getCell(j,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
+                    if( sheet.getCell(coluna,0).getContents().equals( "&Área (m2)" )){ //precisamos converter de string para numeric para o mongo poder calcular
                         double value;
                                 
                         if(cell.getType() != CellType.NUMBER){
@@ -126,7 +124,7 @@ public class LeituraXLS {
                         }
                         doc.append("area",  value);
                         
-                    } else if( j==2 ) {
+                    } else if( coluna==2 ) {
                         String cellZone = cell.getContents();
                         
                         
@@ -145,7 +143,7 @@ public class LeituraXLS {
                         doc.append("subgrupo-zona", cellZone);
                           
                     } else {
-                        doc.append(sheet.getCell(j,0).getContents(),  cell.getContents());
+                        doc.append(sheet.getCell(coluna,0).getContents(),  cell.getContents());
                     }
                       
                   }
@@ -170,6 +168,10 @@ public class LeituraXLS {
                  // db.pt.count({"subgrupo-zona":"Zona C Alta","#nome":/.*/})
     
     // Item 3): db.pt.find({"#nome":/.*/,"*NPD":/.*/},{"*NPD":1,"_id":0,"#nome":1}).pretty()
+    
+    
+    // modulo & setor
+    // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
    } 
 
 }

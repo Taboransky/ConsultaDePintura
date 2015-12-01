@@ -32,12 +32,66 @@ public class MongoConsultas {
     
     
     public static void main(String[] args) {
+        obtemAreaModuloSetor();
         //obtemAreaPorZona();
-        obtemAreaPorSetor();
+        //obtemAreaPorSetor();
         //obtemTotalArea(); 
         //obtemDiametroFlanges();
     }
     
+    
+    public static void obtemAreaModuloSetor() {
+        // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
+        MongoCollection<Document> ptCollection = initiateMongoCollection();
+        
+        AggregateIterable<Document> agg = ptCollection.aggregate(asList(
+            new Document("$group",new Document("_id",new Document("modulo","$modulo").append("setor","$setor")).append("Total", new Document("$sum","$area"))),
+            new Document("$sort", new Document("_id",1))
+        ));
+        
+        List<Object> listO = new ArrayList<>();
+        
+        agg.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+                
+                int control = 1;  //variável para controlar a leitura (estava gravando dobrado)
+                for(Object o : document.values()) {
+                    if(control==1){
+                        Document aux = (Document) document.get("_id");
+                        String modAux = aux.getString("modulo");
+                        String setAux = aux.getString("setor");
+                        
+                        listO.add(modAux);
+                        listO.add(setAux);
+                        
+                        //System.out.println("modulo: " + modAux + " | setor: "+ setAux);
+                        control = 2;                        
+                    } else {
+                        listO.add(document.get("Total"));
+                        control = 1;
+                    }
+                }
+                
+                //System.out.println(document.toJson());
+            }
+        });
+        
+        System.out.println("Tamanho listO: " + listO.size());
+        
+        
+        // tem que tirar os nulos e o 0 que aparece no começo, mas isso tá vindo do aggregate
+        
+        for (int i=3; i<listO.size(); i++) { //começando de 3 pra tirar o 0 errado
+            
+            if (listO.get(i) != null) {
+                System.out.println("Módulo: " + listO.get(i) + " | Setor: " + listO.get(i+1) + " | Área: " + listO.get(i+2));
+                i +=2;
+            }
+            
+        }
+        
+    }
     //calcular o custo por zona
     public static void obtemAreaPorZona(){
     

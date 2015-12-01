@@ -38,8 +38,8 @@ public class CalculosMetricas {
         List<Double> listPrice = new ArrayList<>();
         List<Double> listHomenM2 = new ArrayList<>();
         
-        List<Double> listaTrataMentoSuperficiePreco = new ArrayList<>();
-        List<Double> listaApliocacaoDeTintaAltoDesempenhoProco = new ArrayList<>();
+        List<Double> listaTratamentoSuperficiePreco = new ArrayList<>();
+        List<Double> listaAplicacaoDeTintaAltoDesempenhoPreco = new ArrayList<>();
         List<Double> listaEquipamentoPreco = new ArrayList<>();
 
         
@@ -52,13 +52,13 @@ public class CalculosMetricas {
                 listArea.add(d);
                 listPrice.add(calcPrice(d));
                 listHomenM2.add(calcHomemPorM2(d));
-                listaTrataMentoSuperficiePreco.add( calcTratamentoSuperficie(d) );
-                listaApliocacaoDeTintaAltoDesempenhoProco.add( calcTintaDeAltoDesempenho(d) );
+                listaTratamentoSuperficiePreco.add( calcTratamentoSuperficie(d) );
+                listaAplicacaoDeTintaAltoDesempenhoPreco.add( calcTintaDeAltoDesempenho(d) );
                 listaEquipamentoPreco.add(calcEquipamento(d));
             }
         }
         
-        EscrituraXLS.writeZonaHH( listNames, listArea, listPrice, listHomenM2,listaTrataMentoSuperficiePreco,listaApliocacaoDeTintaAltoDesempenhoProco,listaEquipamentoPreco );
+        EscrituraXLS.writeZonaHH( listNames, listArea, listPrice, listHomenM2,listaTratamentoSuperficiePreco,listaAplicacaoDeTintaAltoDesempenhoPreco,listaEquipamentoPreco );
     }
     
     
