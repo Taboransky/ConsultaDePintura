@@ -55,12 +55,10 @@ public class CalculosMetricas {
         List<Registro> listaRegistros = new ArrayList<Registro>();
 
         String nome = "";
-        for(int i=0;i<listO.size();i++){
-            
-            nome = "Módulo: " + listO.get(i) + " | Setor: " + listO.get(i+1);             
+        for(int i=0;i<listO.size();i++){           
            
             double d = (Double) listO.get(i+2);
-            Registro registro = new Registro(nome, d, calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
             listaRegistros.add(registro);
             i +=2;
         }

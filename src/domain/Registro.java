@@ -7,7 +7,8 @@ package domain;
 
 public class Registro {
     
-    private String nome; 
+    private String nomeParametro1; 
+    private String nomeParametro2; 
     private Double area;
     private Double precoTotal;
     private Double homemM2;
@@ -18,9 +19,10 @@ public class Registro {
     public Registro(){
     }
     
-    public Registro( String nome, Double area, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco  ){
+    public Registro( String nomeParametro1, Double area, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco  ){
         
-        this.nome = nome;
+        this.nomeParametro1 = nomeParametro1;
+        this.nomeParametro2 = "";
         this.area = area;
         this.precoTotal = precoTotal;
         this.homemM2 = homemM2;
@@ -29,8 +31,24 @@ public class Registro {
         this.equipamentoPreco = equipamentoPreco;
     }
     
-    public String getNome(){
-        return this.nome;
+    public Registro( String nomeParametro1, String nomeParametro2, Double area, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco  ){
+        
+        this.nomeParametro1 = nomeParametro1;
+        this.nomeParametro2 = nomeParametro2;
+        this.area = area;
+        this.precoTotal = precoTotal;
+        this.homemM2 = homemM2;
+        this.tratamentoSuperficiePreco = tratamentoSuperficiePreco;
+        this.aplicacaoDeTintaAltoDesempenhoPreco = aplicacaoDeTintaAltoDesempenhoPreco;
+        this.equipamentoPreco = equipamentoPreco;
+    }
+    
+    public String getnomeParametro1(){
+        return this.nomeParametro1;
+    }
+    
+    public String getnomeParametro2(){
+        return this.nomeParametro2;
     }
     
     public Double getArea(){
