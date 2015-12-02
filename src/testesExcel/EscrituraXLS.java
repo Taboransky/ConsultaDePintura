@@ -6,6 +6,7 @@
 
 package testesExcel;
 
+import domain.Registro;
 import java.io.File;
 import java.util.List;
  
@@ -110,7 +111,7 @@ public class EscrituraXLS {
     }
     
 
-    public static void writeZonaHH( List<String> listNames, List<Double> listArea, List<Double> listPrice, List<Double> listHomenM2, List<Double> listaTrataMentoSuperficiePreco,List<Double> listaApliocacaoDeTintaAltoDesempenhoProco,List<Double> listaEquipamentoPreco ) {
+    public static void writeZonaHH(  List<Registro> listaRegistros ) {
         Label labelToAdd;
         Number numToAdd;
         int linha=1, coluna=0;
@@ -129,62 +130,29 @@ public class EscrituraXLS {
             writableSheet.addCell(new Label(5,0,"Preco total"));
             writableSheet.addCell(new Label(6,0,"Homem M2"));
             
-            //Nomes da zonas
-            for( String nome : listNames){
-                labelToAdd = new Label(0, linha, nome);
+            for( Registro registro : listaRegistros   ){
+                labelToAdd = new Label(0, linha, registro.getNome());//Obtem o nome
                 writableSheet.addCell(labelToAdd);
-                linha++;
-            }
-            
-            linha=1;
-            //Area total
-            for( Double area : listArea){
-                numToAdd = new Number(1, linha, area);
+                
+                numToAdd =  new Number(1, linha, registro.getArea());//Obtem area
                 writableSheet.addCell(numToAdd);
-                linha++;
-            }
-            
-            linha=1;
-            //Preco do tratamento de superficie
-            for( Double area : listaTrataMentoSuperficiePreco){
-                numToAdd = new Number(2, linha, area);
+                
+                numToAdd =  new Number(2, linha, registro.getTratamentoSuperficiePreco());//Obtem tratamento de superficie
                 writableSheet.addCell(numToAdd);
-                linha++;
-            }
-            
-            linha=1;
-            //preco tinta de alto desempenho
-            for( Double price : listaApliocacaoDeTintaAltoDesempenhoProco){
-                numToAdd = new Number(3, linha, price);
+                
+                numToAdd =  new Number(3, linha, registro.getAplicacaoDeTintaAltoDesempenhoPreco());//Obtem aplicacao de tinta de alto desempenho
                 writableSheet.addCell(numToAdd);
-                linha++;
-            }
-            
-            linha=1;
-            //preco do equipamento
-            for( Double price : listaEquipamentoPreco){
-                numToAdd = new Number(4, linha, price);
+                
+                numToAdd =  new Number(4, linha, registro.getEquipamentoPreco());//Obtem preco de equipamento
                 writableSheet.addCell(numToAdd);
-                linha++;
-            }
-            
-            linha=1;
-            //preco total
-            for( Double price : listPrice){
-                numToAdd = new Number(5, linha, price);
+                
+                numToAdd =  new Number(5, linha, registro.getPrecoTotal());//Obtem preco total
                 writableSheet.addCell(numToAdd);
-                linha++;
+                
+                numToAdd =  new Number(6, linha, registro.getHomemM2());//Obtem homem M2
+                writableSheet.addCell(numToAdd);    
             }
             
-            linha=1;
-            //Homem por metro quadrado
-            for( Double hh : listHomenM2){
-                numToAdd = new Number(6, linha, hh);
-                writableSheet.addCell(numToAdd);
-                linha++;
-            }
-            
-
             //Write and close the workbook
             writableWorkbook.write();
             writableWorkbook.close();

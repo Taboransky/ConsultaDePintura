@@ -6,6 +6,7 @@
 
 package consultadepintura;
 
+import domain.Registro;
 import java.util.ArrayList;
 import java.util.List;
 import static mongoDB.MongoConsultas.filterSameCompNo2;
@@ -33,32 +34,20 @@ public class CalculosMetricas {
     
     public static void CalculoMetricas(List<Object> listO) {
         //usando listO = [String, Double]
-        List<String> listNames = new ArrayList<>();
-        List<Double> listArea = new ArrayList<>();
-        List<Double> listPrice = new ArrayList<>();
-        List<Double> listHomenM2 = new ArrayList<>();
-        
-        List<Double> listaTratamentoSuperficiePreco = new ArrayList<>();
-        List<Double> listaAplicacaoDeTintaAltoDesempenhoPreco = new ArrayList<>();
-        List<Double> listaEquipamentoPreco = new ArrayList<>();
+        List<Registro> listaRegistros = new ArrayList<Registro>();
 
-        
+        String nome = "";
         for(int i=0;i<listO.size();i++){
             if(i%2==0){
-                listNames.add( (String) listO.get(i));
-                
+              nome = (String) listO.get(i);             
             } else {
                 double d = (Double) listO.get(i);
-                listArea.add(d);
-                listPrice.add(calcPrice(d));
-                listHomenM2.add(calcHomemPorM2(d));
-                listaTratamentoSuperficiePreco.add( calcTratamentoSuperficie(d) );
-                listaAplicacaoDeTintaAltoDesempenhoPreco.add( calcTintaDeAltoDesempenho(d) );
-                listaEquipamentoPreco.add(calcEquipamento(d));
+                Registro registro = new Registro(nome, d, calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+                listaRegistros.add(registro);
             }
         }
         
-        EscrituraXLS.writeZonaHH( listNames, listArea, listPrice, listHomenM2,listaTratamentoSuperficiePreco,listaAplicacaoDeTintaAltoDesempenhoPreco,listaEquipamentoPreco );
+        EscrituraXLS.writeZonaHH( listaRegistros );
     }
     
     
