@@ -43,8 +43,10 @@ public class MongoConsultas {
     public static void obtemAreaModuloSetor() {
         // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
         MongoCollection<Document> ptCollection = initiateMongoCollection();
+        String regexNome = "^.*$";
         
         AggregateIterable<Document> agg = ptCollection.aggregate(asList(
+            new Document("$match",new Document("modulo",java.util.regex.Pattern.compile(regexNome))),
             new Document("$group",new Document("_id",new Document("modulo","$modulo").append("setor","$setor")).append("Total", new Document("$sum","$area"))),
             new Document("$sort", new Document("_id",1))
         ));
@@ -79,19 +81,12 @@ public class MongoConsultas {
         
         System.out.println("Tamanho listO: " + listO.size());
         
-        
-        // tem que tirar os nulos e o 0 que aparece no começo, mas isso tá vindo do aggregate
-        
-        for (int i=3; i<listO.size(); i++) { //começando de 3 pra tirar o 0 errado
-            
-            if (listO.get(i) != null) {
-                System.out.println("Módulo: " + listO.get(i) + " | Setor: " + listO.get(i+1) + " | Área: " + listO.get(i+2));
-                i +=2;
-            }
-            
+        for (int i=0; i<listO.size(); i++) {
+            System.out.println("Módulo: " + listO.get(i) + " | Setor: " + listO.get(i+1) + " | Área: " + listO.get(i+2));
+            i +=2;
         }
-        
     }
+    
     //calcular o custo por zona
     public static void obtemAreaPorZona(){
     
