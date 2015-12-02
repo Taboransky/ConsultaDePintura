@@ -151,6 +151,62 @@ public class EscrituraXLS {
                 
                 numToAdd =  new Number(6, linha, registro.getHomemM2());//Obtem homem M2
                 writableSheet.addCell(numToAdd);    
+                
+                linha++;
+            }
+            
+            //Write and close the workbook
+            writableWorkbook.write();
+            writableWorkbook.close();
+            System.out.println("Arquivo salvo: " + exlFile.getName());
+ 
+        } catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void writeModuloSetor(  List<Registro> listaRegistros ) {
+        Label labelToAdd;
+        Number numToAdd;
+        int linha=1, coluna=0;
+        
+        try {
+            File exlFile = new File("src/output/ModuloSetor.xls");
+            WritableWorkbook writableWorkbook = Workbook.createWorkbook(exlFile);
+ 
+            WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
+            
+            writableSheet.addCell(new Label(0,0,"Zona"));
+            writableSheet.addCell(new Label(1,0,"Area Total"));
+            writableSheet.addCell(new Label(2,0,"Preco tratamento de superficie"));
+            writableSheet.addCell(new Label(3,0,"Preco aplicacao de tinta de alto desempenho"));
+            writableSheet.addCell(new Label(4,0,"Preco equipamento"));
+            writableSheet.addCell(new Label(5,0,"Preco total"));
+            writableSheet.addCell(new Label(6,0,"Homem M2"));
+            
+            for( Registro registro : listaRegistros   ){
+                labelToAdd = new Label(0, linha, registro.getNome());//Obtem o nome
+                writableSheet.addCell(labelToAdd);
+                
+                numToAdd =  new Number(1, linha, registro.getArea());//Obtem area
+                writableSheet.addCell(numToAdd);
+                
+                numToAdd =  new Number(2, linha, registro.getTratamentoSuperficiePreco());//Obtem tratamento de superficie
+                writableSheet.addCell(numToAdd);
+                
+                numToAdd =  new Number(3, linha, registro.getAplicacaoDeTintaAltoDesempenhoPreco());//Obtem aplicacao de tinta de alto desempenho
+                writableSheet.addCell(numToAdd);
+                
+                numToAdd =  new Number(4, linha, registro.getEquipamentoPreco());//Obtem preco de equipamento
+                writableSheet.addCell(numToAdd);
+                
+                numToAdd =  new Number(5, linha, registro.getPrecoTotal());//Obtem preco total
+                writableSheet.addCell(numToAdd);
+                
+                numToAdd =  new Number(6, linha, registro.getHomemM2());//Obtem homem M2
+                writableSheet.addCell(numToAdd);  
+                
+                linha++;
             }
             
             //Write and close the workbook

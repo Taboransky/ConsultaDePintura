@@ -70,7 +70,7 @@ public class MongoConsultas {
                         //System.out.println("modulo: " + modAux + " | setor: "+ setAux);
                         control = 2;                        
                     } else {
-                        listO.add(document.get("Total"));
+                        listO.add(document.getDouble("Total"));
                         control = 1;
                     }
                 }
@@ -79,12 +79,15 @@ public class MongoConsultas {
             }
         });
         
+        CalculosMetricas.CalculoMetricasModuloSetor(listO);
+        
         System.out.println("Tamanho listO: " + listO.size());
         
         for (int i=0; i<listO.size(); i++) {
             System.out.println("Módulo: " + listO.get(i) + " | Setor: " + listO.get(i+1) + " | Área: " + listO.get(i+2));
             i +=2;
         }
+                
     }
     
     //calcular o custo por zona

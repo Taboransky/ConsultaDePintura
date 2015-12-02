@@ -50,6 +50,24 @@ public class CalculosMetricas {
         EscrituraXLS.writeZonaHH( listaRegistros );
     }
     
+    public static void CalculoMetricasModuloSetor(List<Object> listO) {
+        //usando listO = [String, Double]
+        List<Registro> listaRegistros = new ArrayList<Registro>();
+
+        String nome = "";
+        for(int i=0;i<listO.size();i++){
+            
+            nome = "Módulo: " + listO.get(i) + " | Setor: " + listO.get(i+1);             
+           
+            double d = (Double) listO.get(i+2);
+            Registro registro = new Registro(nome, d, calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+            listaRegistros.add(registro);
+            i +=2;
+        }
+        
+        EscrituraXLS.writeModuloSetor( listaRegistros );
+    }
+    
     
     public static double calcPrice(double area) {
         double wj2 = 1.25 * 115 * area * 0.2;
