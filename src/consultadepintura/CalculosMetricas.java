@@ -42,7 +42,7 @@ public class CalculosMetricas {
               nome = (String) listO.get(i);             
             } else {
                 double d = (Double) listO.get(i);
-                Registro registro = new Registro(nome, d, calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+                Registro registro = new Registro(nome, d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
                 listaRegistros.add(registro);
             }
         }
@@ -58,7 +58,7 @@ public class CalculosMetricas {
         for(int i=0;i<listO.size();i++){           
            
             double d = (Double) listO.get(i+2);
-            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
             listaRegistros.add(registro);
             i +=2;
         }
@@ -81,9 +81,17 @@ public class CalculosMetricas {
         return price;
     }
     
+    public static double calcWj2(double area){
+        return 1.25 * 115 * area * 0.2;
+    }
+    
+    public static double calcWj3(double area){
+        return 1 * 115 * area * 0.8;
+    }
+    
     public static double calcTratamentoSuperficie(double area){
-        double wj2 = 1.25 * 115 * area * 0.2;
-        double wj3 = 1 * 115 * area * 0.8;
+        double wj2 = calcWj2(area);
+        double wj3 = calcWj3(area);
         double tratamento = wj2 + wj3;
         
         return tratamento;
