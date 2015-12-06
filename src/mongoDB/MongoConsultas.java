@@ -32,7 +32,7 @@ public class MongoConsultas {
     
     
     public static void main(String[] args) {
-        obtemAreaModuloSetor();
+        //obtemAreaModuloSetor();
         //obtemAreaPorZona();
         //obtemAreaPorSetor();
         //obtemTotalArea(); 
@@ -40,14 +40,19 @@ public class MongoConsultas {
     }
     
     
-    public static void obtemAreaModuloSetor() {
+    public static void obtemCruzamentoDeDadosPorDoisParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca) {
         // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
         MongoCollection<Document> ptCollection = initiateMongoCollection();
         String regexNome = "^.*$";
         
+        String nomePrimeiroParametroDeProcura = primeiroParamentroDeBusca; 
+        String nomePrimeiroParametroDeProcura2 = segundoParametroDeBusca;
+        
         AggregateIterable<Document> agg = ptCollection.aggregate(asList(
             new Document("$match",new Document("modulo",java.util.regex.Pattern.compile(regexNome))),
-            new Document("$group",new Document("_id",new Document("modulo","$modulo").append("setor","$setor")).append("Total", new Document("$sum","$area"))),
+            new Document("$group",new Document("_id",new Document(nomePrimeiroParametroDeProcura,"$"+nomePrimeiroParametroDeProcura)
+                                                            .append(nomePrimeiroParametroDeProcura2,"$"+nomePrimeiroParametroDeProcura2))
+                                                            .append("Total", new Document("$sum","$area"))),
             new Document("$sort", new Document("_id",1))
         ));
         
@@ -61,8 +66,8 @@ public class MongoConsultas {
                 for(Object o : document.values()) {
                     if(control==1){
                         Document aux = (Document) document.get("_id");
-                        String modAux = aux.getString("modulo");
-                        String setAux = aux.getString("setor");
+                        String modAux = aux.getString(nomePrimeiroParametroDeProcura);
+                        String setAux = aux.getString(nomePrimeiroParametroDeProcura2);
                         
                         listO.add(modAux);
                         listO.add(setAux);
@@ -79,15 +84,7 @@ public class MongoConsultas {
             }
         });
         
-        CalculosMetricas.CalculoMetricasModuloSetor(listO);
-        
-        System.out.println("Tamanho listO: " + listO.size());
-        
-        for (int i=0; i<listO.size(); i++) {
-            System.out.println("Módulo: " + listO.get(i) + " | Setor: " + listO.get(i+1) + " | Área: " + listO.get(i+2));
-            i +=2;
-        }
-                
+        CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomePrimeiroParametroDeProcura, nomePrimeiroParametroDeProcura2 );
     }
     
     //calcular o custo por zona

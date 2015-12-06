@@ -26,7 +26,7 @@ public class ConsultaDePintura {
         int option = 0;
         LeituraXLS leitura = new LeituraXLS();
         
-        while( option != 5   ){
+        while( option != 6   ){
                
             System.out.println("O que deseja fazer?");
             System.out.println("===================");
@@ -34,7 +34,8 @@ public class ConsultaDePintura {
             System.out.println("2 - Obter Area todal");
             System.out.println("3 - Obter Area todal por Zonas e homem hora");
             System.out.println("4 - Obter Modulo por Setor");
-            System.out.println("5 - Sair");
+            System.out.println("5 - Obter Setor por Zona");
+            System.out.println("6 - Sair");
 
 
             option = reader.nextInt(); 
@@ -49,10 +50,13 @@ public class ConsultaDePintura {
                 case 3: MongoConsultas.obtemAreaPorZona();                   
                     break;
                     
-                case 4 : MongoConsultas.obtemAreaModuloSetor();                   
+                case 4 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "setor");     
                     break;
                     
-                case 5:                    
+                 case 5 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "subgrupo-zona");        
+                    break;
+                    
+                case 6:                    
                     break;
                     
                 default: System.out.println("Escolha um opcao correta");                   

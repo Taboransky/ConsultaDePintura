@@ -50,7 +50,7 @@ public class CalculosMetricas {
         EscrituraXLS.writeZonaHH( listaRegistros );
     }
     
-    public static void CalculoMetricasModuloSetor(List<Object> listO) {
+    public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2) {
         //usando listO = [String, Double]
         List<Registro> listaRegistros = new ArrayList<Registro>();
 
@@ -63,7 +63,7 @@ public class CalculosMetricas {
             i +=2;
         }
         
-        EscrituraXLS.writeModuloSetor( listaRegistros );
+        EscrituraXLS.writeCSVParaDoisParametros( listaRegistros, parametro1, parametro2 );
     }
     
     

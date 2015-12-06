@@ -173,19 +173,20 @@ public class EscrituraXLS {
         }
     }
     
-    public static void writeModuloSetor(  List<Registro> listaRegistros ) {
+    public static void writeCSVParaDoisParametros(  List<Registro> listaRegistros, String parametro1, String parametro2 ) {
         Label labelToAdd;
         Number numToAdd;
         int linha=1, coluna=0;
+        String fileName = "Arquivo"+parametro1+parametro2;
         
         try {
-            File exlFile = new File("src/output/ModuloSetor.xls");
+            File exlFile = new File("src/output/"+fileName+".xls");
             WritableWorkbook writableWorkbook = Workbook.createWorkbook(exlFile);
  
             WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
             
-            writableSheet.addCell(new Label(0,0,"Modulo"));
-            writableSheet.addCell(new Label(1,0,"Setor"));
+            writableSheet.addCell(new Label(0,0,parametro1));
+            writableSheet.addCell(new Label(1,0,parametro2));
             writableSheet.addCell(new Label(2,0,"Area Total"));
             writableSheet.addCell(new Label(3,0,"Wj2"));
             writableSheet.addCell(new Label(4,0,"Wj3"));
