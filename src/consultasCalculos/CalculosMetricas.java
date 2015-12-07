@@ -4,13 +4,13 @@
  * and open the template in the editor.
  */
 
-package consultadepintura;
+package consultasCalculos;
 
 import domain.Registro;
 import java.util.ArrayList;
 import java.util.List;
-import static mongoDB.MongoConsultas.filterSameCompNo2;
-import testesExcel.EscrituraXLS;
+import static consultasMongoDB.MongoConsultas.filterSameCompNo2;
+import consultasEntradaSaidaArquivo.EscrituraXLS;
 
 /**
  *
@@ -18,22 +18,8 @@ import testesExcel.EscrituraXLS;
  */
 public class CalculosMetricas {
     
-    public static void main(String[] args) {
-        /*
-        TratamentoSuperficie
-            WJ2 = 1.25 * 115 * m * 0.2(reais)
-            WJ3 = 1 * 115 * m * 0.8(reais)
-        
-        TintaAltoDesempenho
-            112(reais) * m
-        
-        Hidrojato
-            3240,28(reais) * dias
-        */
-    }
-    
+    //Metodo para calculo das matericas procuradas
     public static void CalculoMetricas(List<Object> listO) {
-        //usando listO = [String, Double]
         List<Registro> listaRegistros = new ArrayList<Registro>();
 
         String nome = "";
@@ -51,10 +37,8 @@ public class CalculosMetricas {
     }
     
     public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2) {
-        //usando listO = [String, Double]
         List<Registro> listaRegistros = new ArrayList<Registro>();
 
-        String nome = "";
         for(int i=0;i<listO.size();i++){           
            
             double d = (Double) listO.get(i+2);

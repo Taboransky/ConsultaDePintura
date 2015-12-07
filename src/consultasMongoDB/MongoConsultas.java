@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mongoDB;
+package consultasMongoDB;
 
 import com.mongodb.BasicDBObject;
-import testesExcel.EscrituraXLS;
+import consultasEntradaSaidaArquivo.EscrituraXLS;
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -22,24 +22,14 @@ import org.bson.Document;
 import static java.util.Arrays.asList;
 import java.util.List;
 
-import consultadepintura.CalculosMetricas;
+import consultasCalculos.CalculosMetricas;
 
 /**
  *
  * @author Drope
  */
 public class MongoConsultas {
-    
-    
-    public static void main(String[] args) {
-        //obtemAreaModuloSetor();
-        //obtemAreaPorZona();
-        //obtemAreaPorSetor();
-        //obtemTotalArea(); 
-        //obtemDiametroFlanges();
-    }
-    
-    
+
     public static void obtemCruzamentoDeDadosPorDoisParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca) {
         // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
         MongoCollection<Document> ptCollection = initiateMongoCollection();
@@ -71,16 +61,12 @@ public class MongoConsultas {
                         
                         listO.add(modAux);
                         listO.add(setAux);
-                        
-                        //System.out.println("modulo: " + modAux + " | setor: "+ setAux);
                         control = 2;                        
                     } else {
                         listO.add(document.getDouble("Total"));
                         control = 1;
                     }
                 }
-                
-                //System.out.println(document.toJson());
             }
         });
         

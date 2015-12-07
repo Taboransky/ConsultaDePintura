@@ -8,8 +8,8 @@
 package consultadepintura;
 
 import java.util.Scanner;
-import mongoDB.MongoConsultas;
-import testesExcel.LeituraXLS;
+import consultasMongoDB.MongoConsultas;
+import consultasEntradaSaidaArquivo.LeituraXLS;
 
 /**
  *
@@ -26,16 +26,14 @@ public class ConsultaDePintura {
         int option = 0;
         LeituraXLS leitura = new LeituraXLS();
         
-        while( option != 6   ){
+        while( option != 4   ){
                
             System.out.println("O que deseja fazer?");
             System.out.println("===================");
             System.out.println("1 - Ler arquivos");
-            System.out.println("2 - Obter Area todal");
-            System.out.println("3 - Obter Area todal por Zonas e homem hora");
-            System.out.println("4 - Obter Modulo por Setor");
-            System.out.println("5 - Obter Setor por Zona");
-            System.out.println("6 - Sair");
+            System.out.println("2 - Obter Modulo por Setor");
+            System.out.println("3 - Obter Setor por Zona");
+            System.out.println("4 - Sair");
 
 
             option = reader.nextInt(); 
@@ -44,19 +42,13 @@ public class ConsultaDePintura {
                 case 1: leitura.lerArquivos();                   
                     break; 
                     
-                case 2: MongoConsultas.obtemTotalArea();                   
-                    break; 
-                    
-                case 3: MongoConsultas.obtemAreaPorZona();                   
+                case 2 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "setor");   
                     break;
                     
-                case 4 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "setor");     
+                 case 3 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "subgrupo-zona");      
                     break;
                     
-                 case 5 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "subgrupo-zona");        
-                    break;
-                    
-                case 6:                    
+                case 4:                    
                     break;
                     
                 default: System.out.println("Escolha um opcao correta");                   

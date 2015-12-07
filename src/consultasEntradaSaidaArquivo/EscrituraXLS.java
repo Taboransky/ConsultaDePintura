@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package testesExcel;
+package consultasEntradaSaidaArquivo;
 
 import domain.Registro;
 import java.io.File;
