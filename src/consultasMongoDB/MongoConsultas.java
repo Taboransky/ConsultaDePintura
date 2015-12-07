@@ -43,7 +43,7 @@ public class MongoConsultas {
             new Document("$group",new Document("_id",new Document(nomePrimeiroParametroDeProcura,"$"+nomePrimeiroParametroDeProcura)
                                                             .append(nomePrimeiroParametroDeProcura2,"$"+nomePrimeiroParametroDeProcura2))
                                                             .append("Total", new Document("$sum","$area"))),
-            new Document("$sort", new Document("_id",1))
+            new Document("$sort", new Document("Total",1))
         ));
         
         List<Object> listO = new ArrayList<>();
