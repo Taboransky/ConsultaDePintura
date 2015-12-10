@@ -55,12 +55,6 @@ public class ConsultaDePintura {
                     break;
 
             }
-        
-        }
-        
-        
-        
-        //MongoConsultas.obtemTotalArea();
+        }     
     }
-    
 }

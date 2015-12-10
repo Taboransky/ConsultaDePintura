@@ -1,15 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package consultasCalculos;
 
 import domain.Registro;
 import java.util.ArrayList;
 import java.util.List;
-import static consultasMongoDB.MongoConsultas.filterSameCompNo2;
 import consultasEntradaSaidaArquivo.EscrituraXLS;
 
 /**
