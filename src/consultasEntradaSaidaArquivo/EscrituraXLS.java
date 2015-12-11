@@ -76,38 +76,42 @@ public class EscrituraXLS {
             writableSheet.addCell(new Label(1,0,"Area Total"));
             writableSheet.addCell(new Label(2,0,"Wj2"));
             writableSheet.addCell(new Label(3,0,"Wj3"));
-            writableSheet.addCell(new Label(4,0,"Preco tratamento de superficie"));
-            writableSheet.addCell(new Label(5,0,"Preco aplicacao de tinta de alto desempenho"));
-            writableSheet.addCell(new Label(6,0,"Preco equipamento"));
-            writableSheet.addCell(new Label(7,0,"Preco total"));
-            writableSheet.addCell(new Label(8,0,"Homem M2"));
+            writableSheet.addCell(new Label(4,0,"Preco Tratamento de Superficie"));
+            writableSheet.addCell(new Label(5,0,"Preco Aplicacao de Tinta de Alto Desempenho"));
+            writableSheet.addCell(new Label(6,0,"Preco Equipamento"));
+            writableSheet.addCell(new Label(7,0,"Preço dos Trabalhadores"));
+            writableSheet.addCell(new Label(8,0,"Preco Total"));
+            writableSheet.addCell(new Label(9,0,"Homem M2"));
             
             for( Registro registro : listaRegistros   ){
                 labelToAdd = new Label(0, linha, registro.getnomeParametro1());//Obtem o nome
                 writableSheet.addCell(labelToAdd);
                 
-                numToAdd =  new Number(1, linha, registro.getArea());//Obtem area
+                numToAdd = new Number(1, linha, registro.getArea());//Obtem area
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(2, linha, registro.getWj2());//Obtem area
+                numToAdd = new Number(2, linha, registro.getWj2());//Obtem area
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(3, linha, registro.getWj3());//Obtem area
+                numToAdd = new Number(3, linha, registro.getWj3());//Obtem area
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(4, linha, registro.getTratamentoSuperficiePreco());//Obtem tratamento de superficie
+                numToAdd = new Number(4, linha, registro.getTratamentoSuperficiePreco());//Obtem tratamento de superficie
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(5, linha, registro.getAplicacaoDeTintaAltoDesempenhoPreco());//Obtem aplicacao de tinta de alto desempenho
+                numToAdd = new Number(5, linha, registro.getAplicacaoDeTintaAltoDesempenhoPreco());//Obtem aplicacao de tinta de alto desempenho
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(6, linha, registro.getEquipamentoPreco());//Obtem preco de equipamento
+                numToAdd = new Number(6, linha, registro.getEquipamentoPreco());//Obtem preco de equipamento
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(7, linha, registro.getPrecoTotal());//Obtem preco total
+                numToAdd = new Number(7, linha, registro.getPrecoTrabalhadores());
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(8, linha, registro.getHomemM2());//Obtem homem M2
+                numToAdd = new Number(8, linha, registro.getPrecoTotal());//Obtem preco total
+                writableSheet.addCell(numToAdd);
+                
+                numToAdd = new Number(9, linha, registro.getHomemM2());//Obtem homem M2
                 writableSheet.addCell(numToAdd);    
                 
                 linha++;
@@ -146,8 +150,9 @@ public class EscrituraXLS {
             writableSheet.addCell(new Label(4,0,"Preco tratamento de superficie"));
             writableSheet.addCell(new Label(5,0,"Preco aplicacao de tinta de alto desempenho"));
             writableSheet.addCell(new Label(6,0,"Preco equipamento"));
-            writableSheet.addCell(new Label(7,0,"Preco total"));
-            writableSheet.addCell(new Label(8,0,"Homem M2"));
+            writableSheet.addCell(new Label(7,0,"Preço dos Trabalhadores"));
+            writableSheet.addCell(new Label(8,0,"Preco total"));
+            writableSheet.addCell(new Label(9,0,"Homem M2"));
             
             for( Registro registro : listaRegistros   ){
                 String nomeElemento = registro.getnomeParametro1()+"-"+registro.getnomeParametro2()+"-"+registro.getnomeParametro3();
@@ -172,15 +177,16 @@ public class EscrituraXLS {
                 numToAdd =  new Number(6, linha, registro.getEquipamentoPreco());//Obtem preco de equipamento
                 writableSheet.addCell(numToAdd);
                 
-                
-                DecimalFormat formatter = new DecimalFormat("#0.00");
-                double  n = Double.parseDouble(  formatter.format( registro.getPrecoTotal() ) ); 
-                
-                
-                numToAdd =  new Number(7, linha, n);//Obtem preco total
+                numToAdd = new Number(7, linha, registro.getPrecoTrabalhadores());
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(8, linha, registro.getHomemM2());//Obtem homem M2
+                DecimalFormat formatter = new DecimalFormat("#0.00");
+                double  n = Double.parseDouble(  formatter.format( registro.getPrecoTotal() ) );
+                
+                numToAdd =  new Number(8, linha, n);//Obtem preco total
+                writableSheet.addCell(numToAdd);
+                
+                numToAdd =  new Number(9, linha, registro.getHomemM2());//Obtem homem M2
                 writableSheet.addCell(numToAdd); 
 
                 linha++;
