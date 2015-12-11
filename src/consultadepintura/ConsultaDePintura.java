@@ -45,7 +45,7 @@ public class ConsultaDePintura {
                 case 2 : MongoConsultas.obtemCruzamentoDadosPorParametros("modulo", "setor", "");   
                     break;
                     
-                 case 3 : MongoConsultas.obtemCruzamentoDadosPorParametros("modulo","setor", "subgrupo-zona");      
+                 case 3 : MongoConsultas.obtemCruzamentoDadosPorParametros("modulo","setor", "subgrupo-zona");
                     break;
                     
                 case 4:                    

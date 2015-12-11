@@ -33,17 +33,17 @@ public class MongoConsultas {
     public static void obtemCruzamentoDadosPorParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca, String terceiroParametroDeBusca) {
         // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
     
-        String nomePrimeiroParametroDeProcura = primeiroParamentroDeBusca; 
-        String nomePrimeiroParametroDeProcura2 = segundoParametroDeBusca;
-        String nomePrimeiroParametroDeProcura3 = terceiroParametroDeBusca;
+        String nomeParametroDeProcura = primeiroParamentroDeBusca; 
+        String nomeParametroDeProcura2 = segundoParametroDeBusca;
+        String nomeParametroDeProcura3 = terceiroParametroDeBusca;
         List<Object> listO = new ArrayList<>();
          
-        if( nomePrimeiroParametroDeProcura3 == ""   ){
-            listO = retornaResultadoQueryComDoisParametros(nomePrimeiroParametroDeProcura,nomePrimeiroParametroDeProcura2);
-            CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomePrimeiroParametroDeProcura, nomePrimeiroParametroDeProcura2 );
+        if( nomeParametroDeProcura3 == ""   ){
+            listO = retornaResultadoQueryComDoisParametros(nomeParametroDeProcura,nomeParametroDeProcura2);
+            CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2 );
         } else {
-            listO =  retornaResultadoQueryComTresParametros(nomePrimeiroParametroDeProcura,nomePrimeiroParametroDeProcura2,nomePrimeiroParametroDeProcura3);
-            CalculosMetricas.CalculoMetricasParaTresParametrosDeBusca(listO, nomePrimeiroParametroDeProcura, nomePrimeiroParametroDeProcura2,nomePrimeiroParametroDeProcura3 );
+            listO =  retornaResultadoQueryComTresParametros(nomeParametroDeProcura,nomeParametroDeProcura2,nomeParametroDeProcura3);
+            CalculosMetricas.CalculoMetricasParaTresParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2,nomeParametroDeProcura3 );
         }
     }
     
@@ -126,72 +126,7 @@ public class MongoConsultas {
          
         return listO; 
     }
-    
-    //calcular o custo por zona
-    public static void obtemAreaPorZona(){
-    
-        MongoCollection<Document> ptCollection = initiateMongoCollection();
-        String regexNome = "^.*$";
-        
-        AggregateIterable<Document> agg = ptCollection.aggregate(asList(
-            new Document("$match",new Document("#nome",java.util.regex.Pattern.compile(regexNome))),
-            new Document("$group",new Document("_id","$subgrupo-zona").append("Total", new Document("$sum","$area"))),
-            new Document("$sort", new Document("_id",1))
-        ));
-    
-        List<Object> listO = new ArrayList<>();
-        
-        agg.forEach(new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                int control = 1;  //variável para controlar a leitura (estava gravando dobrado)
-                for(Object o : document.values()) {
-                    if(control==1){
-                        listO.add(document.getString("_id"));
-                        control = 2;
-                    } else {
-                        listO.add(document.getDouble("Total"));
-                        control = 1;
-                    }
-                }
-            }
-        });
-        
-        CalculosMetricas.CalculoMetricas(listO);
-    }
-    
-    public static void obtemAreaPorSetor(){
-        
-        MongoCollection<Document> ptCollection = initiateMongoCollection();
-        String regexNome = "^.*$";
-        
-        AggregateIterable<Document> agg = ptCollection.aggregate(asList(
-            new Document("$match",new Document("#nome",java.util.regex.Pattern.compile(regexNome))),
-            new Document("$group",new Document("_id","$#grupo").append("Total", new Document("$sum","$area"))),
-            new Document("$sort", new Document("_id",1))
-        ));
-        
-        
-        List<Object> listO = new ArrayList<>();
-        
-        agg.forEach(new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                int control=1;
-                for(Object o : document.values()) {
-                    if(control==1){
-                        listO.add(document.getString("_id"));
-                        control = 2;
-                    } else {
-                        listO.add(document.getDouble("Total"));
-                        control = 1;
-                    }
-                }
-            }
-        });
-        
-        CalculosMetricas.CalculoMetricas(listO);
-    }    
+      
     
     public static void obtemTotalArea(){
         MongoCollection<Document> ptCollection = initiateMongoCollection();

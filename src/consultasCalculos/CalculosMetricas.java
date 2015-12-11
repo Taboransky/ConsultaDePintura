@@ -10,33 +10,17 @@ import consultasEntradaSaidaArquivo.EscrituraXLS;
  * @author bapho
  */
 public class CalculosMetricas {
-    
-    //Metodo para calculo das matericas procuradas
-    public static void CalculoMetricas(List<Object> listO) {
-        List<Registro> listaRegistros = new ArrayList<Registro>();
-        double totalHomensTrabalhando = 30;
-        String nome = "";
-        for(int i=0;i<listO.size();i++){
-            if(i%2==0){
-              nome = (String) listO.get(i);             
-            } else {
-                double d = (Double) listO.get(i);
-                Registro registro = new Registro(nome, d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
-                listaRegistros.add(registro);
-            }
-        }
-        
-        EscrituraXLS.writeZonaHH( listaRegistros );
-    }
-    
+
     public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2) {
         List<Registro> listaRegistros = new ArrayList<Registro>();
         double totalHomensTrabalhando = 30;
-
+        int numDias = calculaDiasDeTrabalho(30);
+        
         for(int i=0;i<listO.size();i++){ 
             double d = (Double) listO.get(i+2);
-            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
-            listaRegistros.add(registro);          
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d),
+                    calcWj3(d), calcPrice(d, numDias), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d, numDias) );
+            listaRegistros.add(registro);        
             i +=2;
         }    
         EscrituraXLS.writeCSVParaParametros( listaRegistros, parametro1, parametro2, "" );
@@ -45,28 +29,29 @@ public class CalculosMetricas {
     public static void CalculoMetricasParaTresParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, String parametro3 ) {
         List<Registro> listaRegistros = new ArrayList<Registro>();
         double totalHomensTrabalhando = 30;
-
+        int numDias = calculaDiasDeTrabalho(30);
         for(int i=0;i<listO.size();i++){      
             double d = (Double) listO.get(i+3);
-            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d),
+                    calcPrice(d, numDias), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d,numDias ) );
             registro.setNomeParametro3((String) listO.get(i+2)); 
-            listaRegistros.add(registro);      
+            listaRegistros.add(registro);     
             i +=3;
         }    
         EscrituraXLS.writeCSVParaParametros( listaRegistros, parametro1, parametro2,parametro3  );
     }
     
     
-    public static double calcPrice(double area) {
-        double wj2 = 1.25 * 115 * area * 0.2;
-        double wj3 = 1 * 115 * area * 0.8;
+    public static double calcPrice(double area, int numDias) {
+        double wj2 = calcWj2( area);
+        double wj3 = calcWj3( area);
         double tratamento = wj2 + wj3;
         
-        double desempenho = 112 * area;
+        double desempenho = calcTintaDeAltoDesempenho( area);
         
-        double hidrojato = 3240.28 * 30;
+        double hidrojato = calcEquipamento(area, numDias);
         
-        double price = tratamento + desempenho + hidrojato;
+        double price = tratamento + desempenho + hidrojato + calculaPrecoDoFuncionario();
         
         return price;
     }
@@ -92,8 +77,8 @@ public class CalculosMetricas {
         return desempenho;
     }
      
-    public static double calcEquipamento(double area){
-        double hidrojato = 3240.28 * 30;  
+    public static double calcEquipamento(double area, int numDias){
+        double hidrojato = 3240.28 * numDias;  
         return hidrojato;
     }
     
@@ -101,8 +86,15 @@ public class CalculosMetricas {
         return area/totalHomensTrabalhando;
     }
     
-    public static int calculaDiasDeTrabalho(  ){
-        return 1;   
+    public static int calculaDiasDeTrabalho( int novo_hm   ){
+        int hm_padrao = 30;
+        int tmp_padrao = 30;
+        int novoTempo = (hm_padrao * tmp_padrao) / novo_hm ;
+        
+        return novoTempo ;
     }
     
+    public static double calculaPrecoDoFuncionario(){
+        return 0.0;
+    }
 }

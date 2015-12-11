@@ -8,6 +8,7 @@ package consultasEntradaSaidaArquivo;
 
 import domain.Registro;
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.List;
  
 import jxl.*;
@@ -171,12 +172,17 @@ public class EscrituraXLS {
                 numToAdd =  new Number(6, linha, registro.getEquipamentoPreco());//Obtem preco de equipamento
                 writableSheet.addCell(numToAdd);
                 
-                numToAdd =  new Number(7, linha, registro.getPrecoTotal());//Obtem preco total
+                
+                DecimalFormat formatter = new DecimalFormat("#0.00");
+                double  n = Double.parseDouble(  formatter.format( registro.getPrecoTotal() ) ); 
+                
+                
+                numToAdd =  new Number(7, linha, n);//Obtem preco total
                 writableSheet.addCell(numToAdd);
                 
                 numToAdd =  new Number(8, linha, registro.getHomemM2());//Obtem homem M2
-                writableSheet.addCell(numToAdd);  
-                
+                writableSheet.addCell(numToAdd); 
+
                 linha++;
             }
             
