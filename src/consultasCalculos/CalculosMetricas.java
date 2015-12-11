@@ -14,14 +14,14 @@ public class CalculosMetricas {
     //Metodo para calculo das matericas procuradas
     public static void CalculoMetricas(List<Object> listO) {
         List<Registro> listaRegistros = new ArrayList<Registro>();
-
+        double totalHomensTrabalhando = 30;
         String nome = "";
         for(int i=0;i<listO.size();i++){
             if(i%2==0){
               nome = (String) listO.get(i);             
             } else {
                 double d = (Double) listO.get(i);
-                Registro registro = new Registro(nome, d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+                Registro registro = new Registro(nome, d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
                 listaRegistros.add(registro);
             }
         }
@@ -31,16 +31,29 @@ public class CalculosMetricas {
     
     public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2) {
         List<Registro> listaRegistros = new ArrayList<Registro>();
+        double totalHomensTrabalhando = 30;
 
-        for(int i=0;i<listO.size();i++){           
-           
+        for(int i=0;i<listO.size();i++){ 
             double d = (Double) listO.get(i+2);
-            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
-            listaRegistros.add(registro);
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+            listaRegistros.add(registro);          
             i +=2;
-        }
-        
-        EscrituraXLS.writeCSVParaDoisParametros( listaRegistros, parametro1, parametro2 );
+        }    
+        EscrituraXLS.writeCSVParaParametros( listaRegistros, parametro1, parametro2, "" );
+    }
+    
+    public static void CalculoMetricasParaTresParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, String parametro3 ) {
+        List<Registro> listaRegistros = new ArrayList<Registro>();
+        double totalHomensTrabalhando = 30;
+
+        for(int i=0;i<listO.size();i++){      
+            double d = (Double) listO.get(i+3);
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d), calcPrice(d), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d) );
+            registro.setNomeParametro3((String) listO.get(i+2)); 
+            listaRegistros.add(registro);      
+            i +=3;
+        }    
+        EscrituraXLS.writeCSVParaParametros( listaRegistros, parametro1, parametro2,parametro3  );
     }
     
     
@@ -84,10 +97,12 @@ public class CalculosMetricas {
         return hidrojato;
     }
     
-    public static double calcHomemPorM2(double area){
-        double totalDeHomensTrabalhando = 30;
-        
-        return area/totalDeHomensTrabalhando;
+    public static double calcHomemPorM2(double area, double totalHomensTrabalhando){
+        return area/totalHomensTrabalhando;
+    }
+    
+    public static int calculaDiasDeTrabalho(  ){
+        return 1;   
     }
     
 }

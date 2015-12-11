@@ -8,7 +8,8 @@ package domain;
 public class Registro {
     
     private String nomeParametro1; 
-    private String nomeParametro2; 
+    private String nomeParametro2;
+    private String nomeParametro3;
     private Double area;
     private Double wj2;
     private Double wj3;
@@ -17,6 +18,7 @@ public class Registro {
     private Double tratamentoSuperficiePreco;
     private Double aplicacaoDeTintaAltoDesempenhoPreco;
     private Double equipamentoPreco;
+    private int totalDiasTrabalhados;
     
     public Registro(){
     }
@@ -25,6 +27,7 @@ public class Registro {
         
         this.nomeParametro1 = nomeParametro1;
         this.nomeParametro2 = "";
+        this.nomeParametro3 = "";
         this.area = area;
         this.wj2 = wj2;
         this.wj3 = wj3;
@@ -33,12 +36,14 @@ public class Registro {
         this.tratamentoSuperficiePreco = tratamentoSuperficiePreco;
         this.aplicacaoDeTintaAltoDesempenhoPreco = aplicacaoDeTintaAltoDesempenhoPreco;
         this.equipamentoPreco = equipamentoPreco;
+        this.totalDiasTrabalhados = 0;
     }
     
     public Registro( String nomeParametro1, String nomeParametro2, Double area, Double wj2, Double wj3, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco  ){
         
         this.nomeParametro1 = nomeParametro1;
         this.nomeParametro2 = nomeParametro2;
+        this.nomeParametro3 = "";
         this.area = area;
         this.wj2 = wj2;
         this.wj3 = wj3;
@@ -47,6 +52,7 @@ public class Registro {
         this.tratamentoSuperficiePreco = tratamentoSuperficiePreco;
         this.aplicacaoDeTintaAltoDesempenhoPreco = aplicacaoDeTintaAltoDesempenhoPreco;
         this.equipamentoPreco = equipamentoPreco;
+        this.totalDiasTrabalhados = 0;
     }
     
     public String getnomeParametro1(){
@@ -89,4 +95,19 @@ public class Registro {
         return this.equipamentoPreco;
     }
     
+    public int getTotalDiasTrabalhados(){
+        return this.totalDiasTrabalhados;
+    }
+    
+    public void setTotalDiasTrabalhados(int totalDiasTrabalhados){
+        this.totalDiasTrabalhados = totalDiasTrabalhados;
+    }
+    
+    public void setNomeParametro3(String nome){
+        this.nomeParametro3 = nome;
+    }
+    
+    public String getnomeParametro3(){
+        return this.nomeParametro3;
+    }
 }

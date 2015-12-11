@@ -122,11 +122,15 @@ public class EscrituraXLS {
         }
     }
     
-    public static void writeCSVParaDoisParametros(  List<Registro> listaRegistros, String parametro1, String parametro2 ) {
+    public static void writeCSVParaParametros(  List<Registro> listaRegistros, String parametro1, String parametro2, String parametro3 ) {
         Label labelToAdd;
         Number numToAdd;
         int linha=1, coluna=0;
-        String fileName = "Arquivo"+parametro1+parametro2;
+        String nome = parametro1+"-"+parametro2;
+        if( parametro3 != ""  ){
+            nome = nome +"-"+ parametro3;
+        }
+        String fileName = "Arquivo"+nome;
         
         try {
             File exlFile = new File("src/output/"+fileName+".xls");
@@ -134,7 +138,7 @@ public class EscrituraXLS {
  
             WritableSheet writableSheet = writableWorkbook.createSheet("Sheet1", 0);
             
-            writableSheet.addCell(new Label(0,0,parametro1+"-"+parametro2));
+            writableSheet.addCell(new Label(0,0,nome));
             writableSheet.addCell(new Label(1,0,"Area Total"));
             writableSheet.addCell(new Label(2,0,"Wj2"));
             writableSheet.addCell(new Label(3,0,"Wj3"));
@@ -145,7 +149,8 @@ public class EscrituraXLS {
             writableSheet.addCell(new Label(8,0,"Homem M2"));
             
             for( Registro registro : listaRegistros   ){
-                labelToAdd = new Label(0, linha, registro.getnomeParametro1()+"-"+registro.getnomeParametro2());//Obtem o nome
+                String nomeElemento = registro.getnomeParametro1()+"-"+registro.getnomeParametro2()+"-"+registro.getnomeParametro3();
+                labelToAdd = new Label(0, linha, nomeElemento);//Obtem o nome
                 writableSheet.addCell(labelToAdd);
                 
                 numToAdd =  new Number(1, linha, registro.getArea());//Obtem area

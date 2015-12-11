@@ -32,7 +32,7 @@ public class ConsultaDePintura {
             System.out.println("===================");
             System.out.println("1 - Ler arquivos");
             System.out.println("2 - Obter Modulo por Setor");
-            System.out.println("3 - Obter Setor por Zona");
+            System.out.println("3 - Obter Modulo por Setor por Zona");
             System.out.println("4 - Sair");
 
 
@@ -42,10 +42,10 @@ public class ConsultaDePintura {
                 case 1: leitura.lerArquivos();                   
                     break; 
                     
-                case 2 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "setor");   
+                case 2 : MongoConsultas.obtemCruzamentoDadosPorParametros("modulo", "setor", "");   
                     break;
                     
-                 case 3 : MongoConsultas.obtemCruzamentoDeDadosPorDoisParametros("modulo", "subgrupo-zona");      
+                 case 3 : MongoConsultas.obtemCruzamentoDadosPorParametros("modulo","setor", "subgrupo-zona");      
                     break;
                     
                 case 4:                    

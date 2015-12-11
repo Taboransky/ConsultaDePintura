@@ -30,13 +30,26 @@ import consultasCalculos.CalculosMetricas;
  */
 public class MongoConsultas {
 
-    public static void obtemCruzamentoDeDadosPorDoisParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca) {
+    public static void obtemCruzamentoDadosPorParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca, String terceiroParametroDeBusca) {
         // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
-        MongoCollection<Document> ptCollection = initiateMongoCollection();
-        String regexNome = "^.*$";
-        
+    
         String nomePrimeiroParametroDeProcura = primeiroParamentroDeBusca; 
         String nomePrimeiroParametroDeProcura2 = segundoParametroDeBusca;
+        String nomePrimeiroParametroDeProcura3 = terceiroParametroDeBusca;
+        List<Object> listO = new ArrayList<>();
+         
+        if( nomePrimeiroParametroDeProcura3 == ""   ){
+            listO = retornaResultadoQueryComDoisParametros(nomePrimeiroParametroDeProcura,nomePrimeiroParametroDeProcura2);
+            CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomePrimeiroParametroDeProcura, nomePrimeiroParametroDeProcura2 );
+        } else {
+            listO =  retornaResultadoQueryComTresParametros(nomePrimeiroParametroDeProcura,nomePrimeiroParametroDeProcura2,nomePrimeiroParametroDeProcura3);
+            CalculosMetricas.CalculoMetricasParaTresParametrosDeBusca(listO, nomePrimeiroParametroDeProcura, nomePrimeiroParametroDeProcura2,nomePrimeiroParametroDeProcura3 );
+        }
+    }
+    
+    private static List<Object> retornaResultadoQueryComDoisParametros( String nomePrimeiroParametroDeProcura, String nomePrimeiroParametroDeProcura2){
+        MongoCollection<Document> ptCollection = initiateMongoCollection();
+        String regexNome = "^.*$";
         
         AggregateIterable<Document> agg = ptCollection.aggregate(asList(
             new Document("$match",new Document("modulo",java.util.regex.Pattern.compile(regexNome))),
@@ -51,14 +64,14 @@ public class MongoConsultas {
         agg.forEach(new Block<Document>() {
             @Override
             public void apply(final Document document) {
-                
+
                 int control = 1;  //variável para controlar a leitura (estava gravando dobrado)
                 for(Object o : document.values()) {
                     if(control==1){
                         Document aux = (Document) document.get("_id");
                         String modAux = aux.getString(nomePrimeiroParametroDeProcura);
                         String setAux = aux.getString(nomePrimeiroParametroDeProcura2);
-                        
+
                         listO.add(modAux);
                         listO.add(setAux);
                         control = 2;                        
@@ -69,8 +82,49 @@ public class MongoConsultas {
                 }
             }
         });
+       
+        return listO; 
+    }
+    
+    private static List<Object> retornaResultadoQueryComTresParametros( String nomePrimeiroParametroDeProcura, String nomePrimeiroParametroDeProcura2,String nomePrimeiroParametroDeProcura3 ){
+        MongoCollection<Document> ptCollection = initiateMongoCollection();
+        String regexNome = "^.*$";
+        AggregateIterable<Document> agg = ptCollection.aggregate(asList(
+            new Document("$match",new Document("modulo",java.util.regex.Pattern.compile(regexNome))),
+            new Document("$group",new Document("_id",new Document(nomePrimeiroParametroDeProcura,"$"+nomePrimeiroParametroDeProcura)
+                                                            .append(nomePrimeiroParametroDeProcura2,"$"+nomePrimeiroParametroDeProcura2)
+                                                            .append(nomePrimeiroParametroDeProcura3,"$"+nomePrimeiroParametroDeProcura3))
+                                                            .append("Total", new Document("$sum","$area"))),
+            new Document("$sort", new Document("Total",1))
+        ));
+       
+        List<Object> listO = new ArrayList<>();
         
-        CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomePrimeiroParametroDeProcura, nomePrimeiroParametroDeProcura2 );
+        agg.forEach(new Block<Document>() {
+            @Override
+            public void apply(final Document document) {
+
+                int control = 1;  //variável para controlar a leitura (estava gravando dobrado)
+                for(Object o : document.values()) {
+                    if(control==1){
+                        Document aux = (Document) document.get("_id");
+                        String modAux = aux.getString(nomePrimeiroParametroDeProcura);
+                        String setAux = aux.getString(nomePrimeiroParametroDeProcura2);
+                        String setAux2 = aux.getString(nomePrimeiroParametroDeProcura3);
+
+                        listO.add(modAux);
+                        listO.add(setAux);
+                        listO.add(setAux2);
+                        control = 2;                        
+                    } else {
+                        listO.add(document.getDouble("Total"));
+                        control = 1;
+                    }
+                }
+            }
+        });
+         
+        return listO; 
     }
     
     //calcular o custo por zona
