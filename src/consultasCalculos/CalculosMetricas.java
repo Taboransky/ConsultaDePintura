@@ -20,7 +20,9 @@ public class CalculosMetricas {
             double d = (Double) listO.get(i+2);
             Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d),
                     calcWj3(d), calcPrice(d, numDias), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d, numDias) );
-            listaRegistros.add(registro);        
+            registro.setTotalDiasTrabalhados(numDias);
+            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias)  );
+            listaRegistros.add(registro);
             i +=2;
         }    
         EscrituraXLS.writeCSVParaParametros( listaRegistros, parametro1, parametro2, "" );
@@ -51,7 +53,7 @@ public class CalculosMetricas {
         
         double hidrojato = calcEquipamento(area, numDias);
         
-        double price = tratamento + desempenho + hidrojato + calculaPrecoDoFuncionario();
+        double price = tratamento + desempenho + hidrojato + calculaPrecoDoFuncionario(numDias);
         
         return price;
     }
@@ -94,7 +96,10 @@ public class CalculosMetricas {
         return novoTempo ;
     }
     
-    public static double calculaPrecoDoFuncionario(){
-        return 0.0;
+    public static double calculaPrecoDoFuncionario(int diasDeTrabalho){
+        int precoHora = 80;
+        int horasTrabalhadas = 6;
+        
+        return precoHora*horasTrabalhadas*diasDeTrabalho;
     }
 }
