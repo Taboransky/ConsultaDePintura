@@ -69,9 +69,11 @@ public class EscrituraXLS {
                 numToAdd =  new Number(6, linha, registro.getEquipamentoPreco());//Obtem preco de equipamento
                 writableSheet.addCell(numToAdd);
                 
+                numToAdd =  new Number(7, linha, registro.getPrecoPorTrabalhador());//Obtem preco de equipamento
+                writableSheet.addCell(numToAdd);
                 
-                
-                
+                numToAdd =  new Number(8, linha, registro.getTotalDiasTrabalhados());//Obtem preco de equipamento
+                writableSheet.addCell(numToAdd);
                 
                 DecimalFormat formatter = new DecimalFormat("#0.00");
                 double  n = Double.parseDouble(  formatter.format( registro.getPrecoTotal() ) ); 

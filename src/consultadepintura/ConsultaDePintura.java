@@ -43,20 +43,12 @@ public class ConsultaDePintura {
                     break; 
                     
                 case 2 : {
-                        System.out.print("Digite o preço Homem-Hora: ");
-                        double precoHH = reader.nextDouble();
-                        System.out.print("Digite a quantidade de horas trabalhadas: ");
-                        double horasTrabalhadas = reader.nextDouble();
-                        MongoConsultas.obtemCruzamentoDadosPorParametros("modulo", "setor", "", precoHH, horasTrabalhadas);
+                        MongoConsultas.obtemCruzamentoDadosPorParametros("modulo", "setor", "");
                     }
                     break;
                     
                  case 3 : {
-                        System.out.print("Digite o preço Homem-Hora: ");
-                        double precoHH = reader.nextDouble();
-                        System.out.print("Digite a quantidade de horas trabalhadas: ");
-                        double horasTrabalhadas = reader.nextDouble();
-                        MongoConsultas.obtemCruzamentoDadosPorParametros("modulo","setor", "subgrupo-zona", precoHH, horasTrabalhadas);
+                        MongoConsultas.obtemCruzamentoDadosPorParametros("modulo","setor", "subgrupo-zona");
                  }
                     break;
                     

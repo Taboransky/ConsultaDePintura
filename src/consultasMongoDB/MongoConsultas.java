@@ -23,6 +23,8 @@ import static java.util.Arrays.asList;
 import java.util.List;
 
 import consultasCalculos.CalculosMetricas;
+import consultasEntradaSaidaArquivo.LeituraXLS;
+import java.util.Scanner;
 
 /**
  *
@@ -30,20 +32,25 @@ import consultasCalculos.CalculosMetricas;
  */
 public class MongoConsultas {
 
-    public static void obtemCruzamentoDadosPorParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca, String terceiroParametroDeBusca, double precoHH, double horasDeTrabalho) {
+    public static void obtemCruzamentoDadosPorParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca, String terceiroParametroDeBusca) {
         // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
-    
+        Scanner reader = new Scanner(System.in); 
+        
         String nomeParametroDeProcura = primeiroParamentroDeBusca; 
         String nomeParametroDeProcura2 = segundoParametroDeBusca;
         String nomeParametroDeProcura3 = terceiroParametroDeBusca;
         List<Object> listO = new ArrayList<>();
          
         if( nomeParametroDeProcura3 == ""   ){
+            System.out.print("Numero de trabalhadores: ");
+            int numeroDeTrabalhadores = reader.nextInt();
+            System.out.print("Numero de trabalhadores: ");
+            int homemHora = reader.nextInt();
             listO = retornaResultadoQueryComDoisParametros(nomeParametroDeProcura,nomeParametroDeProcura2);
-            CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2, precoHH, horasDeTrabalho);
+            CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2,numeroDeTrabalhadores,homemHora );
         } else {
             listO =  retornaResultadoQueryComTresParametros(nomeParametroDeProcura,nomeParametroDeProcura2,nomeParametroDeProcura3);
-            CalculosMetricas.CalculoMetricasParaTresParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2,nomeParametroDeProcura3, precoHH, horasDeTrabalho);
+            CalculosMetricas.CalculoMetricasParaTresParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2,nomeParametroDeProcura3 );
         }
     }
     

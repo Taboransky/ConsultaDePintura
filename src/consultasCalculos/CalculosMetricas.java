@@ -11,32 +11,34 @@ import consultasEntradaSaidaArquivo.EscrituraXLS;
  */
 public class CalculosMetricas {
 
-    public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, double precoHH, double horasDeTrabalho) {
+    public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, int numeroDeTrabalhadores, int homemHora) {
         List<Registro> listaRegistros = new ArrayList<>();
-        double totalHomensTrabalhando = 30;
-        int numDias = calculaDiasDeTrabalho(30);
+        int numDias = calculaDiasDeTrabalho(numeroDeTrabalhadores);
         
         for(int i=0;i<listO.size();i++){ 
             double d = (Double) listO.get(i+2);
             Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d),
-                    calcWj3(d), calcPrice(d, numDias), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d, numDias) );
+                    calcWj3(d), calcPrice(d, numDias,homemHora), calcHomemPorM2(d, numeroDeTrabalhadores), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d, numDias) );
             registro.setTotalDiasTrabalhados(numDias);
-            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias)  );
+            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias,homemHora)  );
             listaRegistros.add(registro);
             i +=2;
         }    
         EscrituraXLS.writeCSVParaParametros( listaRegistros, parametro1, parametro2, "" );
     }
     
-    public static void CalculoMetricasParaTresParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, String parametro3, double precoHH, double horasDeTrabalho) {
+    public static void CalculoMetricasParaTresParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, String parametro3) {
         List<Registro> listaRegistros = new ArrayList<>();
         double totalHomensTrabalhando = 30;
+        int homemHora= 80;
         int numDias = calculaDiasDeTrabalho(30);
         for(int i=0;i<listO.size();i++){      
             double d = (Double) listO.get(i+3);
-            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d),calcPrice(d, numDias, precoHH, horasDeTrabalho), 
-                    calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d,numDias), calculaPrecoDoFuncionario(precoHH, horasDeTrabalho));
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d),calcPrice(d, numDias,homemHora), 
+                    calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d,numDias));
             registro.setNomeParametro3((String) listO.get(i+2)); 
+            registro.setTotalDiasTrabalhados(numDias);
+            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias,homemHora)  );
             listaRegistros.add(registro);     
             i +=3;
         }    
@@ -44,7 +46,7 @@ public class CalculosMetricas {
     }
     
     
-    public static double calcPrice(double area, int numDias, double precoHH, double horasDeTrabalho) {
+    public static double calcPrice(double area, int numDias, int homemHora) {
         double wj2 = calcWj2( area);
         double wj3 = calcWj3( area);
         double tratamento = wj2 + wj3;
@@ -53,7 +55,7 @@ public class CalculosMetricas {
         
         double hidrojato = calcEquipamento(area, numDias);
         
-        double price = tratamento + desempenho + hidrojato + calculaPrecoDoFuncionario(numDias);
+        double price = tratamento + desempenho + hidrojato + calculaPrecoDoFuncionario(numDias,homemHora);
         
         return price;
     }
@@ -96,8 +98,8 @@ public class CalculosMetricas {
         return novoTempo ;
     }
     
-    public static double calculaPrecoDoFuncionario(int diasDeTrabalho){
-        int precoHora = 80;
+    public static double calculaPrecoDoFuncionario(int diasDeTrabalho, int homemHora){
+        int precoHora = homemHora;
         int horasTrabalhadas = 6;
         
         return precoHora*horasTrabalhadas*diasDeTrabalho;

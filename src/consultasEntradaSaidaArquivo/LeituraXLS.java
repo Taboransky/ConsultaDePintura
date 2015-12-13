@@ -45,10 +45,7 @@ public class LeituraXLS {
    {
        MongoClient mongoClient = new MongoClient(); //conect ao MongoDB
        MongoDatabase db = mongoClient.getDatabase("plataforma");//Conecta ao banco de dados
-       
-       
-       
-       System.out.println("tamo na Main");
+
        try{ 
            lerTudo(db);
        } catch(Exception e)
@@ -61,23 +58,20 @@ public class LeituraXLS {
        File folder = new File("src/documentos_geiza");
        File[] listOfFiles = folder.listFiles();
        int qtdLidos = 0;
-       
-       System.out.println("Total de arquivos" + listOfFiles.length);
-       
+
        MongoCollection myCollection = db.getCollection("pt");
        myCollection.drop();
        
        for (File file : listOfFiles) {
             if (file.isFile()) {
-                testaLer(db, file.getName());
+                lerArquivo(db, file.getName());
                 qtdLidos++;
             }
         }
-       System.out.println("Total de arquivos lidos: " + qtdLidos);
-       
+
    }
    
-   public static void testaLer( MongoDatabase db, String fileName) throws IOException, BiffException{
+   public static void lerArquivo( MongoDatabase db, String fileName) throws IOException, BiffException{
         //System.out.println("Entramo na funcao");
         
        String filePath = "src/documentos_geiza/" + fileName;
@@ -86,7 +80,6 @@ public class LeituraXLS {
         ws.setEncoding("Cp1252");//enconding com utf-8
        
         Workbook workbook = Workbook.getWorkbook(new File(filePath),ws);
-        System.out.println("Abri o arquivo: " + fileName);
         Sheet sheet = workbook.getSheet(0);
         
         
