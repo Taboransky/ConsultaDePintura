@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package domain;
 
 public class Registro {
@@ -19,6 +14,7 @@ public class Registro {
     private Double aplicacaoDeTintaAltoDesempenhoPreco;
     private Double equipamentoPreco;
     private int totalDiasTrabalhados;
+    private Double precoPorTrabalhador;
     
     public Registro(){
     }
@@ -109,5 +105,13 @@ public class Registro {
     
     public String getnomeParametro3(){
         return this.nomeParametro3;
+    }
+    
+    public void setSrecoPorTrabalhador( Double precoPorTrabalhador){
+        this.precoPorTrabalhador = precoPorTrabalhador;
+    }
+    
+    public Double getPrecoPorTrabalhador( ){
+        return this.precoPorTrabalhador;
     }
 }
