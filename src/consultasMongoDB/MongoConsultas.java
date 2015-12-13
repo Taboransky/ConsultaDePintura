@@ -127,35 +127,7 @@ public class MongoConsultas {
         return listO; 
     }
       
-    
-    public static void obtemTotalArea(){
-        MongoCollection<Document> ptCollection = initiateMongoCollection();
-        
-        System.out.println(ptCollection.count());
-        
-        String regexpN = "^.*$";
-        String regexpSG =  "^.*Alta.*$";
-        AggregateIterable<Document> agg = ptCollection.aggregate(asList(
-                new Document("$match", new Document("#nome",java.util.regex.Pattern.compile(regexpN))),
-                new Document("$match", new Document("subgrupo-zona",java.util.regex.Pattern.compile(regexpSG))),
-                new Document("$group", new Document("_id", "$subgrupo-zona").append("Area", new Document("$sum","$area"))),
-                new Document("$sort", new Document("Area",-1))
-        ));
-        
-        
-        List<String> sToPass = new ArrayList<>();
-        
-        agg.forEach(new Block<Document>() {
-            @Override
-            public void apply(final Document document) {
-                for(Object o : document.values()) {
-                    sToPass.add(o.toString());
-                }     
-            }
-        });
-        EscrituraXLS.writeZoneArea(sToPass);
-    }
-    
+
     public static MongoCollection<Document> initiateMongoCollection(){
         MongoClient mongoClient = new MongoClient();
         MongoDatabase database = mongoClient.getDatabase("plataforma");
