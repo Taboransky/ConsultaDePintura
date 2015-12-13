@@ -11,8 +11,8 @@ import consultasEntradaSaidaArquivo.EscrituraXLS;
  */
 public class CalculosMetricas {
 
-    public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2) {
-        List<Registro> listaRegistros = new ArrayList<Registro>();
+    public static void CalculoMetricasDeDoisParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, double precoHH, double horasDeTrabalho) {
+        List<Registro> listaRegistros = new ArrayList<>();
         double totalHomensTrabalhando = 30;
         int numDias = calculaDiasDeTrabalho(30);
         
@@ -28,14 +28,14 @@ public class CalculosMetricas {
         EscrituraXLS.writeCSVParaParametros( listaRegistros, parametro1, parametro2, "" );
     }
     
-    public static void CalculoMetricasParaTresParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, String parametro3 ) {
-        List<Registro> listaRegistros = new ArrayList<Registro>();
+    public static void CalculoMetricasParaTresParametrosDeBusca(List<Object> listO,String parametro1, String parametro2, String parametro3, double precoHH, double horasDeTrabalho) {
+        List<Registro> listaRegistros = new ArrayList<>();
         double totalHomensTrabalhando = 30;
         int numDias = calculaDiasDeTrabalho(30);
         for(int i=0;i<listO.size();i++){      
             double d = (Double) listO.get(i+3);
-            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d),
-                    calcPrice(d, numDias), calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d,numDias ) );
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d),calcPrice(d, numDias, precoHH, horasDeTrabalho), 
+                    calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d,numDias), calculaPrecoDoFuncionario(precoHH, horasDeTrabalho));
             registro.setNomeParametro3((String) listO.get(i+2)); 
             listaRegistros.add(registro);     
             i +=3;
@@ -44,7 +44,7 @@ public class CalculosMetricas {
     }
     
     
-    public static double calcPrice(double area, int numDias) {
+    public static double calcPrice(double area, int numDias, double precoHH, double horasDeTrabalho) {
         double wj2 = calcWj2( area);
         double wj3 = calcWj3( area);
         double tratamento = wj2 + wj3;

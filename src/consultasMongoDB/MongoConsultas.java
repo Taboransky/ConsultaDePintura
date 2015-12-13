@@ -30,7 +30,7 @@ import consultasCalculos.CalculosMetricas;
  */
 public class MongoConsultas {
 
-    public static void obtemCruzamentoDadosPorParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca, String terceiroParametroDeBusca) {
+    public static void obtemCruzamentoDadosPorParametros(String primeiroParamentroDeBusca, String segundoParametroDeBusca, String terceiroParametroDeBusca, double precoHH, double horasDeTrabalho) {
         // db.pt.aggregate([ {$group:{_id:{"modulo":"$modulo","setor":"$setor"},total:{$sum:"$area"}}},  {$sort: { modulo: -1 }} ])
     
         String nomeParametroDeProcura = primeiroParamentroDeBusca; 
@@ -40,10 +40,10 @@ public class MongoConsultas {
          
         if( nomeParametroDeProcura3 == ""   ){
             listO = retornaResultadoQueryComDoisParametros(nomeParametroDeProcura,nomeParametroDeProcura2);
-            CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2 );
+            CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2, precoHH, horasDeTrabalho);
         } else {
             listO =  retornaResultadoQueryComTresParametros(nomeParametroDeProcura,nomeParametroDeProcura2,nomeParametroDeProcura3);
-            CalculosMetricas.CalculoMetricasParaTresParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2,nomeParametroDeProcura3 );
+            CalculosMetricas.CalculoMetricasParaTresParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2,nomeParametroDeProcura3, precoHH, horasDeTrabalho);
         }
     }
     

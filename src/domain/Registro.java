@@ -19,7 +19,7 @@ public class Registro {
     public Registro(){
     }
     
-    public Registro( String nomeParametro1, Double area, Double wj2, Double wj3, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco  ){
+    public Registro( String nomeParametro1, Double area, Double wj2, Double wj3, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco, Double precoTrabalhadores){
         
         this.nomeParametro1 = nomeParametro1;
         this.nomeParametro2 = "";
@@ -33,9 +33,10 @@ public class Registro {
         this.aplicacaoDeTintaAltoDesempenhoPreco = aplicacaoDeTintaAltoDesempenhoPreco;
         this.equipamentoPreco = equipamentoPreco;
         this.totalDiasTrabalhados = 0;
+        this.precoTrabalhadores = precoTrabalhadores;
     }
     
-    public Registro( String nomeParametro1, String nomeParametro2, Double area, Double wj2, Double wj3, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco  ){
+    public Registro( String nomeParametro1, String nomeParametro2, Double area, Double wj2, Double wj3, Double precoTotal, Double homemM2, Double tratamentoSuperficiePreco, Double aplicacaoDeTintaAltoDesempenhoPreco, Double equipamentoPreco, Double precoTrabalhadores){
         
         this.nomeParametro1 = nomeParametro1;
         this.nomeParametro2 = nomeParametro2;
@@ -49,6 +50,7 @@ public class Registro {
         this.aplicacaoDeTintaAltoDesempenhoPreco = aplicacaoDeTintaAltoDesempenhoPreco;
         this.equipamentoPreco = equipamentoPreco;
         this.totalDiasTrabalhados = 0;
+        this.precoTrabalhadores = precoTrabalhadores;
     }
     
     public String getnomeParametro1(){
