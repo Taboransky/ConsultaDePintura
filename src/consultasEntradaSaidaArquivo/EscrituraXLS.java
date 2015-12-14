@@ -38,12 +38,12 @@ public class EscrituraXLS {
             writableSheet.addCell(new Label(1,0,"Area Total"));
             writableSheet.addCell(new Label(2,0,"Wj2"));
             writableSheet.addCell(new Label(3,0,"Wj3"));
-            writableSheet.addCell(new Label(4,0,"Preco tratamento de superficie"));
-            writableSheet.addCell(new Label(5,0,"Preco aplicacao de tinta de alto desempenho"));
-            writableSheet.addCell(new Label(6,0,"Preco equipamento"));
-            writableSheet.addCell(new Label(7,0,"Preco por trabalhador"));
-            writableSheet.addCell(new Label(8,0,"Dias trabalhandos"));
-            writableSheet.addCell(new Label(9,0,"Preco total"));
+            writableSheet.addCell(new Label(4,0,"Preco Tratamento de Superficie"));
+            writableSheet.addCell(new Label(5,0,"Preco Aplicacao de Tinta de Alto Desempenho"));
+            writableSheet.addCell(new Label(6,0,"Preco Equipamento"));
+            writableSheet.addCell(new Label(7,0,"Custo Pessoal"));
+            writableSheet.addCell(new Label(8,0,"Dias Trabalhandos"));
+            writableSheet.addCell(new Label(9,0,"Preco Total"));
             writableSheet.addCell(new Label(10,0,"Homem M2"));
             
             for( Registro registro : listaRegistros   ){

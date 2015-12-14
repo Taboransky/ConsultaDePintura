@@ -44,7 +44,7 @@ public class MongoConsultas {
         if( nomeParametroDeProcura3 == ""   ){
             System.out.print("Numero de trabalhadores: ");
             int numeroDeTrabalhadores = reader.nextInt();
-            System.out.print("Numero de trabalhadores: ");
+            System.out.print("Preço do homem-hora: ");
             int homemHora = reader.nextInt();
             listO = retornaResultadoQueryComDoisParametros(nomeParametroDeProcura,nomeParametroDeProcura2);
             CalculosMetricas.CalculoMetricasDeDoisParametrosDeBusca(listO, nomeParametroDeProcura, nomeParametroDeProcura2,numeroDeTrabalhadores,homemHora );
