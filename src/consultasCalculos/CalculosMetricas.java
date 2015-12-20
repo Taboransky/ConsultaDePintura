@@ -91,8 +91,8 @@ public class CalculosMetricas {
     }
     
     public static int calculaDiasDeTrabalho( int novo_hm   ){
-        int hm_padrao = 30;
-        int tmp_padrao = 30;
+        int hm_padrao = 30;//Numero de trabalhadores padrao
+        int tmp_padrao = 30;//Tempo que 30 trabalhadores levam para finalizar um setor
         int novoTempo = (hm_padrao * tmp_padrao) / novo_hm ;
         
         return novoTempo ;
