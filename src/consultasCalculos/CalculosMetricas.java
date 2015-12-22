@@ -18,9 +18,9 @@ public class CalculosMetricas {
         for(int i=0;i<listO.size();i++){ 
             double d = (Double) listO.get(i+2);
             Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d),
-                    calcWj3(d), calcPrice(d, numDias,homemHora), calcHomemPorM2(d, numeroDeTrabalhadores), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d, numDias) );
+                    calcWj3(d), calcPrice(d, numDias,homemHora, numeroDeTrabalhadores), calcHomemPorM2(d, numeroDeTrabalhadores), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d, numDias) );
             registro.setTotalDiasTrabalhados(numDias);
-            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias,homemHora)  );
+            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias,homemHora, numeroDeTrabalhadores)  );
             listaRegistros.add(registro);
             i +=2;
         }    
@@ -34,11 +34,11 @@ public class CalculosMetricas {
         int numDias = calculaDiasDeTrabalho(30);
         for(int i=0;i<listO.size();i++){      
             double d = (Double) listO.get(i+3);
-            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d),calcPrice(d, numDias,homemHora), 
+            Registro registro = new Registro((String) listO.get(i), (String) listO.get(i+1), d, calcWj2(d), calcWj3(d),calcPrice(d, numDias, homemHora, totalHomensTrabalhando), 
                     calcHomemPorM2(d, totalHomensTrabalhando), calcTratamentoSuperficie(d), calcTintaDeAltoDesempenho(d), calcEquipamento(d,numDias));
             registro.setNomeParametro3((String) listO.get(i+2)); 
             registro.setTotalDiasTrabalhados(numDias);
-            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias,homemHora)  );
+            registro.setSrecoPorTrabalhador( calculaPrecoDoFuncionario(numDias,homemHora, totalHomensTrabalhando)  );
             listaRegistros.add(registro);     
             i +=3;
         }    
@@ -46,7 +46,7 @@ public class CalculosMetricas {
     }
     
     
-    public static double calcPrice(double area, int numDias, int homemHora) {
+    public static double calcPrice(double area, int numDias, int homemHora, double numTrabalhadores) {
         double wj2 = calcWj2( area);
         double wj3 = calcWj3( area);
         double tratamento = wj2 + wj3;
@@ -55,7 +55,7 @@ public class CalculosMetricas {
         
         double hidrojato = calcEquipamento(area, numDias);
         
-        double price = tratamento + desempenho + hidrojato + calculaPrecoDoFuncionario(numDias,homemHora);
+        double price = tratamento + desempenho + hidrojato + calculaPrecoDoFuncionario(numDias,homemHora,numTrabalhadores);
         
         return price;
     }
@@ -98,10 +98,10 @@ public class CalculosMetricas {
         return novoTempo ;
     }
     
-    public static double calculaPrecoDoFuncionario(int diasDeTrabalho, int homemHora){
+    public static double calculaPrecoDoFuncionario(int diasDeTrabalho, int homemHora, double  numTrabalhadores){
         int precoHora = homemHora;
         int horasTrabalhadas = 6;
         
-        return precoHora*horasTrabalhadas*diasDeTrabalho;
+        return precoHora*horasTrabalhadas*diasDeTrabalho*numTrabalhadores;
     }
 }
