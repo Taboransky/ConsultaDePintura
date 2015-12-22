@@ -47,17 +47,15 @@ public class LeituraXLS {
        MongoDatabase db = mongoClient.getDatabase("plataforma");//Conecta ao banco de dados
 
        try{ 
-           lerTudo(db);
+           leituraDeArquivos(db);
        } catch(Exception e)
        {System.out.println(e.getMessage());};
       
    }
 
-   public static void lerTudo(MongoDatabase db) throws IOException, BiffException {
-       //File folder = new File("/plataformFiles");
-       File folder = new File("src/documentos_geiza");
+   public static void leituraDeArquivos(MongoDatabase db) throws IOException, BiffException {
+       File folder = new File("src/arquivosPlataformaP56");
        File[] listOfFiles = folder.listFiles();
-       int qtdLidos = 0;
 
        MongoCollection myCollection = db.getCollection("pt");
        myCollection.drop();
@@ -65,16 +63,14 @@ public class LeituraXLS {
        for (File file : listOfFiles) {
             if (file.isFile()) {
                 lerArquivo(db, file.getName());
-                qtdLidos++;
             }
         }
-
    }
    
    public static void lerArquivo( MongoDatabase db, String fileName) throws IOException, BiffException{
         //System.out.println("Entramo na funcao");
         
-       String filePath = "src/documentos_geiza/" + fileName;
+       String filePath = "src/arquivosPlataformaP56/" + fileName;
        
         WorkbookSettings ws = new WorkbookSettings();// resolver o problema de encoding.
         ws.setEncoding("Cp1252");//enconding com utf-8
